@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -8,11 +8,10 @@
     <meta name="author" content="">
 
     <link rel="icon" href="/images/favicon.ico">
-    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32"/>
+    <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16"/>
 
-
-    <title>Vuex</title>
+    <title>001</title>
 
     <!--bower_Bootstrap4a6_css-->
     <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
@@ -21,32 +20,64 @@
     <link href="style.css" rel="stylesheet">
 
 
-  </head>
-  <body>
-  
-  
-	<h1>001</h1>
+</head>
+<body>
 
 
+<div id="app" class="container">
+    <div class="row">
+
+        <div class="col-sm-4">
+            <h1>List users by ajax<br><small>(with vue-resource)</small></h1>
+            <ul class="list-group">
+                <li v-for="item in lists" class="list-group-item">
+                {{item.name.first }} {{item.name.last }}
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-8">
+            <h1>JSON</h1>
+            <pre>
+            {{ $data }}
+            </pre>
+        </div>
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    </div>
 
-    <!--bower_Bootstrap4a6_js-->
-    <script src="/vendor/jquery/dist/jquery.slim.min.js"></script>
-    <script src="/vendor/tether/dist/js/tether.min.js"></script>
-    <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
- 
-    <!--bower_vue-->
-    <script src="/vendor/vue/dist/vue.js"></script>
- 
-    <!--bower_vuex-->
-    <script src="/vendor/vuex/dist/vuex.js"></script>
- 
-    <!--main-->
-    <script src="script.js"></script>   
+
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+<!--bower_Bootstrap4a6_js-->
+<script src="/vendor/jquery/dist/jquery.slim.min.js"></script>
+<script src="/vendor/tether/dist/js/tether.min.js"></script>
+<script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!--VUE.JS 2-->
+<script src="/vendor/vue/dist/vue.js"></script>
+
+<!--VUE-RESOURCE-->
+<script src="/vendor/vue-resource/dist/vue-resource.js"></script>
+
+<!--VUEX-->
+<!--
+<script src="/vendor/vuex/dist/vuex.js"></script>
+-->
+
+<!--AXIOS-->
+<!--
+<script src="/vendor/axios/dist/axios.js"></script>
+-->
+
+
+<!--main-->
+<script src="./script.js"></script>
 
 
 </body>

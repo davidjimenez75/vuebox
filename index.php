@@ -116,16 +116,28 @@ foreach ($a_dirs as $k=>$v)
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
 
-    <!--bower_Bootstrap4a6_js-->
+    <!--BOOTSTRAP-->
     <script src="/vendor/jquery/dist/jquery.slim.min.js"></script>
     <script src="/vendor/tether/dist/js/tether.min.js"></script>
     <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
  
-    <!--bower_vue-->
+    <!--VUE-->
     <script src="/vendor/vue/dist/vue.js"></script>
- 
-    <!--bower_vuex-->
+
+    <!--VUE-RESOURCE-->
+    <!--
+    <script src="/vendor/vue-resource/dist/vue-resource.js"></script>
+    -->
+
+    <!--VUEX-->
+    <!--
     <script src="/vendor/vuex/dist/vuex.js"></script>
+    -->
+
+    <!--AXIOS-->
+    <!--
+    <script src="/vendor/axios/dist/axios.js"></script>
+    -->
  
     <!--main-->
     <script src="/js/script.js"></script>   
