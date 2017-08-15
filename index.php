@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16" />
 
 
-    <title>Vuex</title>
+    <title>VueBox</title>
 
     <!--bower_Bootstrap4a6_css-->
     <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
@@ -28,7 +28,7 @@
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">Vuex</a>
+      <a class="navbar-brand" href="#">VueBox</a>
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
@@ -36,17 +36,20 @@
             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="https://vuejs.org/v2/guide/" target="_blank">Vue.js 2</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Link2</a>
+            <a class="nav-link" href="https://vuex.vuejs.org/en/" target="_blank">Vuex</a>
           </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://v4-alpha.getbootstrap.com/getting-started/introduction/" target="_blank">Bootstrap 4</a>
+            </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Examples</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
+              <a class="dropdown-item" href="https://vuejs.org/v2/examples/" target="_blank">Vue.js 2</a>
+              <a class="dropdown-item" href="https://vuex.vuejs.org/en/getting-started.html" target="_blank">Vuex</a>
+              <a class="dropdown-item" href="https://v4-alpha.getbootstrap.com/examples/" target="_blank">Bootstrap 4</a>
             </div>
           </li>
         </ul>
@@ -61,7 +64,7 @@
 
       <div class="starter-template">
       	<br><br>
-        <h1>Vuex + Bootstrap starter template</h1>
+        <h1>VueBox = SandBox * ( Vue.js 2 + Vuex + Bootstrap 4 )</h1>
         <p class="lead">Create new folders with the 3 firsts numeric characters.</p>
 
 
