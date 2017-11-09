@@ -131,7 +131,7 @@
             foreach (glob('*', GLOB_ONLYDIR) as $dir) {
 
                 if (!in_array($dir, $ignoredFolders)) {
-                    $a_dirs[]["dir"] = basename($dir);
+                    $a_dirs[]["dir"] = (string) basename($dir);
                 }
             }
 
@@ -163,7 +163,7 @@
 
 
 
-            echo json_encode($a_dirs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
+            echo json_encode($a_dirs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 
             ?>
 
