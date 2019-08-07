@@ -14,8 +14,8 @@
 
     <title>VueBox</title>
 
-    <!--bower_Bootstrap4a6_css-->
-    <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
+    <!--BOOTSTRAP-->
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
 
     <!-- Custom styles for this template -->
     <link href="/css/starter-template.css" rel="stylesheet">
@@ -98,12 +98,12 @@
 <!-- Placed at the end of the document so the pages load faster -->
 
 <!--BOOTSTRAP-->
-<script src="/vendor/jquery/dist/jquery.slim.min.js"></script>
-<script src="/vendor/tether/dist/js/tether.min.js"></script>
-<script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/node_modules/jquery/dist/jquery.slim.min.js"></script>
+<script src="/node_modules/tether/dist/js/tether.min.js"></script>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
 <!--VUE-->
-<script src="/vendor/vue/dist/vue.js"></script>
+<script src="/node_modules/vue/dist/vue.js"></script>
 
 <!--VUE-RESOURCE-->
 <!-- <script src="/vendor/vue-resource/dist/vue-resource.js"></script> -->
@@ -126,7 +126,7 @@
             $descriptionFile = "index.txt";
 
             $a_bg = array('primary', 'success', 'warning', 'danger', 'info', 'muted');
-            $ignoredFolders = array('.', '..', '.git', '.idea', '.svn', 'css', 'images', 'js', 'vendor', 'images');
+            $ignoredFolders = array('.', '..', '.git', '.idea', '.svn', 'css', 'images', 'js', 'vendor', 'images', 'node_modules');
 
             foreach (glob('*', GLOB_ONLYDIR) as $dir) {
 
