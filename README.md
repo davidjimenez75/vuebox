@@ -1,4 +1,4 @@
-# VUEBOX (2019-08-07)
+# VUEBOX (2019-08-25)
 
 Sandbox for learning Vue.
 
@@ -9,11 +9,11 @@ Download from GitHub and install dependencies.
 ### INSTALL DEPENDENCIES WITH YARN
 
 ```bash
-$ yarn install vue
-$ yarn install vuex
-$ yarn install bootstrap
-$ yarn install vue-resource
-$ yarn install axios
+$ yarn add vue
+$ yarn add vuex
+$ yarn add bootstrap
+$ yarn add vue-resource
+$ yarn add axios
 ```
 
 ### INSTALL DEPENDENCIES WITH BOWER (DEPRECATED)
