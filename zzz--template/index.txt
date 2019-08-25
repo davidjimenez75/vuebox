@@ -1,1 +1,1 @@
-Reusable template folder.
+Reusable template folder, just made a copy and rename.

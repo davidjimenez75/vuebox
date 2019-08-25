@@ -1,1 +1,2 @@
-List users by ajax using a remote API (http://randomuser.me/api/)
+List users by ajax using a remote API 
+RANDOM USER GENERATOR <a href="http://randomuser.me/" target="_blank">randomuser.me</a>

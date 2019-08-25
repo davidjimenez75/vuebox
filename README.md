@@ -22,21 +22,22 @@ $ yarn add axios
 $ bower install
 ```
 
-
-
 ## FAQ
 
 ### Add color to folders?
 
-Copy one of the root folder *.txt files inside the subfolder.
+Copy one of the root folder index.*.txt files inside the subfolder.
 
- - danger.txt (red)
- - warning.txt (orange)
- - info.txt (light blue)
- - primary.txt (blue)
- - success.txt  (green)
-
+ - index.danger.txt (red)
+ - index.warning.txt (orange)
+ - index.info.txt (light blue)
+ - index.primary.txt (blue)
+ - index.success.txt  (green)
 
 ### Add small description to folders?
 
 Create an index.txt file with your comments.
+
+### Can I add links to external URL's on the comments?
+
+Yes, just use a href html in the index.txt

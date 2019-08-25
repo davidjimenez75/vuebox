@@ -82,7 +82,7 @@
                         <a v-bind:href="value.dir">{{ value.dir }}</a>
                     </th>
                     <th>
-                        <small>{{ value.description }}</small>
+                        <small v-html="value.description "></small>
                     </th>
                 </tr>
 
@@ -136,15 +136,15 @@
             }
 
             foreach ($a_dirs as $key => $value) {
-                if (file_exists("./" . $value["dir"] . "/danger.txt")) {
+                if (file_exists("./" . $value["dir"] . "/index.danger.txt")) {
                     $a_dirs[$key]["status"] = "danger";
-                } elseif (file_exists("./" . $value["dir"] . "/warning.txt")) {
+                } elseif (file_exists("./" . $value["dir"] . "/index.warning.txt")) {
                     $a_dirs[$key]["status"] = "warning";
-                } elseif (file_exists("./" . $value["dir"] . "/info.txt")) {
+                } elseif (file_exists("./" . $value["dir"] . "/index.info.txt")) {
                     $a_dirs[$key]["status"] = "info";
-                } elseif (file_exists("./" . $value["dir"] . "/primary.txt")) {
+                } elseif (file_exists("./" . $value["dir"] . "/index.primary.txt")) {
                     $a_dirs[$key]["status"] = "primary";
-                } elseif (file_exists("./" . $value["dir"] . "/success.txt")) {
+                } elseif (file_exists("./" . $value["dir"] . "/index.success.txt")) {
                     $a_dirs[$key]["status"] = "success";
                 } else {
                     $a_dirs[$key]["status"] = "muted";
@@ -157,6 +157,7 @@
                 $description_file="index.txt";
                 if (file_exists("./" . $value["dir"] . "/$description_file")) {
                     $a_dirs[$key]["description"] = file_get_contents("./" . $value["dir"] . "/$description_file");
+                    $a_dirs[$key]["description"] = nl2br($a_dirs[$key]["description"]);
                 }
 
             }
