@@ -38,6 +38,32 @@
             width: 3rem;
             height: 3rem;
         }
+        
+        /* Search highlight styles */
+        .search-highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+        
+        /* Mobile search box styles */
+        .mobile-search {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            margin-top: 56px; /* Account for fixed navbar */
+        }
+        
+        @media (min-width: 768px) {
+            .mobile-search {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .navbar .d-flex {
+                display: none !important;
+            }
+        }
     </style>
 
 </head>
@@ -91,12 +117,20 @@
                         </li>
                     </ul>
                     <form class="d-flex" role="search" @submit.prevent="search(searchstr)">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="searchstr">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="searchstr" @input="search(searchstr)">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                 </div>
             </div>
         </nav>
+
+        <!-- Mobile search box -->
+        <div class="mobile-search d-md-none">
+            <form class="d-flex" role="search" @submit.prevent="search(searchstr)">
+                <input class="form-control me-2" type="search" placeholder="Search scripts and descriptions..." aria-label="Search" v-model="searchstr" @input="search(searchstr)">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
 
         <div class="container">
             <div class="starter-template">
@@ -114,8 +148,8 @@
                                     <span :class="'badge ' + getBadgeClass(value.status)">{{ getStatusText(value.status) }}</span>
                                 </td>
                                 <td class="text-start">
-                                    <a :href="value.dir" class="text-decoration-none fw-semibold">{{ value.dir }}</a>
-                                    <span v-if="value.description" class="text-muted ms-2" v-html="value.description"></span>
+                                    <a :href="value.dir" class="text-decoration-none fw-semibold" v-html="highlightText(value.dir)"></a>
+                                    <span v-if="value.description" class="text-muted ms-2" v-html="highlightText(value.description)"></span>
                                 </td>
                             </tr>
                         </tbody>
@@ -233,9 +267,50 @@
                         return ('bg-light text-dark')
                     }
                 },
+                stripHtml(html) {
+                    if (!html) return '';
+                    const tmp = document.createElement('div');
+                    tmp.innerHTML = html;
+                    return tmp.textContent || tmp.innerText || '';
+                },
+                highlightText(text) {
+                    if (!this.searchstr || !text) {
+                        return text;
+                    }
+                    
+                    // First strip HTML to get plain text for highlighting
+                    const plainText = this.stripHtml(text);
+                    const searchRegex = new RegExp(`(${this.escapeRegex(this.searchstr)})`, 'gi');
+                    
+                    // Apply highlighting to the plain text first
+                    const highlightedPlainText = plainText.replace(searchRegex, '<span class="search-highlight">$1</span>');
+                    
+                    // If the original text had HTML, we need to preserve links but add highlighting
+                    if (text !== plainText) {
+                        // For HTML content, we'll highlight within the existing HTML structure
+                        return text.replace(searchRegex, '<span class="search-highlight">$1</span>');
+                    }
+                    
+                    return highlightedPlainText;
+                },
+                escapeRegex(string) {
+                    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                },
                 search(searchstr) {
+                    if (!searchstr || !searchstr.trim()) {
+                        // If search is empty, show all rows
+                        this.dirs.forEach(element => {
+                            element.visible = "visible";
+                        });
+                        return;
+                    }
+                    
                     this.dirs.forEach(element => {
-                        if (element.dir.toLowerCase().includes(searchstr.toLowerCase())) {
+                        const searchInDir = element.dir.toLowerCase().includes(searchstr.toLowerCase());
+                        const searchInDescription = element.description && 
+                            this.stripHtml(element.description).toLowerCase().includes(searchstr.toLowerCase());
+                        
+                        if (searchInDir || searchInDescription) {
                             element.visible = "visible";
                         } else {
                             element.visible = "d-none";
