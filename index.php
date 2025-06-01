@@ -20,10 +20,37 @@
     <!-- Custom styles for this template -->
     <link href="./css/starter-template.css" rel="stylesheet">
 
+    <!-- Vue.js cloak styles to prevent flash of unstyled content -->
+    <style>
+        [v-cloak] {
+            display: none !important;
+        }
+        
+        .vue-loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50vh;
+            flex-direction: column;
+        }
+        
+        .spinner-border-custom {
+            width: 3rem;
+            height: 3rem;
+        }
+    </style>
+
 </head>
 
 <body>
-    <div id="app"><!--#app-->
+    <!-- Loading indicator shown while Vue.js is initializing -->
+    <div id="loading" class="vue-loading">
+        <div class="spinner-border spinner-border-custom text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 text-muted">Loading VueBox...</p>
+    </div>
+    <div id="app" v-cloak><!--#app-->
 
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
@@ -161,6 +188,13 @@
 
                             echo json_encode($a_dirs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
                             ?>
+                }
+            },
+            mounted() {
+                // Hide loading indicator once Vue is mounted
+                const loadingElement = document.getElementById('loading');
+                if (loadingElement) {
+                    loadingElement.style.display = 'none';
                 }
             },
             methods: {
