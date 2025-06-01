@@ -1,6 +1,9 @@
-new Vue({
-    el: '#app',
-    data: {
-      saludo: 'Hi world (Vue)'
+const { createApp } = Vue;
+
+createApp({
+    data() {
+        return {
+            saludo: 'Hi world (Vue 3)'
+        }
     }
-})
+}).mount('#app');
