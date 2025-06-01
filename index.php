@@ -117,7 +117,9 @@
 
                             $a_dirs = array();
 
-                            foreach (glob('*', GLOB_ONLYDIR) as $dir) {
+                            $directories = glob('*', GLOB_ONLYDIR);
+                            natsort($directories);
+                            foreach ($directories as $dir) {
                                 if (!in_array($dir, $ignoredFolders)) {
                                     $a_dirs[]["dir"] = (string) basename($dir);
                                 }
