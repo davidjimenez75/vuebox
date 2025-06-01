@@ -2,7 +2,10 @@
 
 Sandbox for learning Vue.js -> https://vuejs.org/
 
-## 
+
+## INSTALLATION
+
+Getting started with VUEBOX is simple. First, download the repository from GitHub, then choose your preferred package manager for installing dependencies.
 
 Clone repo from GitHub:
 
@@ -27,14 +30,21 @@ sudo -u www-data yarn add axios bootstrap vue vuex vue-resource
 sudo -u www-data yarn install
 ```
 
-## OPTION 3 - INSTALLATION WITH BOWER
+## OPTION 3 - INSTALLATION WITH PNPM
 
-Install dependencies with bower.
+Install dependencies with pnpm (fast, disk space efficient package manager):
 
 ```bash
-sudo -u www-data bower install
+sudo -u www-data pnpm install
 ```
 
+## OPTION 4 - INSTALLATION WITH BUN
+
+Install dependencies with Bun (extremely fast runtime and package manager):
+
+```bash
+sudo -u www-data bun install
+```
 
 
 ## FAQ
