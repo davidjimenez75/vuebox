@@ -1,4 +1,4 @@
-# VUEBOX v2024.10.10
+# VUEBOX v2025.06.01
 
 Sandbox for learning Vue.js -> https://vuejs.org/
 
