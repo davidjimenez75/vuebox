@@ -73,19 +73,27 @@
 
         <div class="container">
             <div class="starter-template">
-                <table class="table table-hover mytable">
-                    <tbody id="list">
-                        <tr v-for="(value, index) in dirs" :key="index" :class="value.visible">
-                            <td class="text-dir">
-                                <small :class="thClassValue(value.status)">&nbsp;&nbsp;{{index+1}}&nbsp;&nbsp;</small>&nbsp;&nbsp;
-                                <a :href="value.dir" class="link-dir">{{ value.dir }}</a>
-                            </td>
-                            <td class="text-description">
-                                <small v-html="value.description"></small>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col" style="width: 20%">Status</th>
+                                <th scope="col" style="width: 80%">Script & Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="list">
+                            <tr v-for="(value, index) in dirs" :key="index" :class="value.visible">
+                                <td class="text-center">
+                                    <span :class="'badge ' + getBadgeClass(value.status)">{{ getStatusText(value.status) }}</span>
+                                </td>
+                                <td class="text-start">
+                                    <a :href="value.dir" class="text-decoration-none fw-semibold">{{ value.dir }}</a>
+                                    <span v-if="value.description" class="text-muted ms-2" v-html="value.description"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div><!-- /.container -->
 
@@ -156,6 +164,26 @@
                 }
             },
             methods: {
+                getBadgeClass(status) {
+                    switch(status) {
+                        case "danger": return "bg-danger";
+                        case "warning": return "bg-warning text-dark";
+                        case "info": return "bg-info text-dark";
+                        case "primary": return "bg-primary";
+                        case "success": return "bg-success";
+                        default: return "bg-secondary";
+                    }
+                },
+                getStatusText(status) {
+                    switch(status) {
+                        case "danger": return "Error";
+                        case "warning": return "Warning";
+                        case "info": return "Info";
+                        case "primary": return "Primary";
+                        case "success": return "Success";
+                        default: return "Normal";
+                    }
+                },
                 thClassValue(status) {
                     if (status == "danger") {
                         return ('bg-danger text-white')
