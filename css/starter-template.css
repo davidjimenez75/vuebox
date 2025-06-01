@@ -2,12 +2,25 @@ body {
   padding-top: 1rem;
 }
 .starter-template {
-  padding: 3rem 1.5rem;
+  padding: 3rem 0;
   text-align: center;
 }
 
-
 table.mytable tr:hover {
-    cursor: pointer;
+  cursor: pointer;
 	border:1px solid black;
+}
+
+.link-dir {
+  white-space: nowrap;
+  text-align: left;
+}
+
+
+.text-dir {
+  text-align: left;
+}
+
+.text-description {
+  text-align: left;
 }
