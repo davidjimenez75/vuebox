@@ -2,13 +2,23 @@
 
 Sandbox for learning Vue.js -> https://vuejs.org/
 
-## INSTALLATION WITH YARN
+## 
 
 Clone repo from GitHub:
 
 ```bash
 sudo -u www-data git clone https://github.com/davidjimenez75/vuebox.git
 ```
+
+## OPTION 1 - INSTALLATION WITH NPM
+
+Install dependencies with npm:
+
+```bash
+sudo -u www-data npm install
+```
+
+## OPTION 2 - INSTALLATION WITH YARN
 
 Install dependencies with Yarn:
 
@@ -17,9 +27,7 @@ sudo -u www-data yarn add axios bootstrap vue vuex vue-resource
 sudo -u www-data yarn install
 ```
 
-
-
-### BOWER INSTALLATION (DEPRECATED)
+## OPTION 3 - INSTALLATION WITH BOWER
 
 Install dependencies with bower.
 
