@@ -1,8 +1,10 @@
-# VUEBOX - Vue.js Learning Sandbox
+# VUEBOX v2025.06.01 - Vue.js Learning Sandbox
 
 ## Project Overview
 
 VUEBOX is a comprehensive learning sandbox designed for exploring and practicing Vue.js development. This project provides a structured environment with multiple examples, templates, and utilities to help developers learn Vue.js concepts progressively.
+
+Sandbox for learning Vue.js -> https://vuejs.org/
 
 ## Project Structure
 
@@ -20,9 +22,9 @@ vuebox/
 │   ├── favicon-16x16.png
 │   ├── favicon-32x32.png
 │   └── vuejs.png
-├── vue--001/               # Vue.js example 1 (Markdown editor)
-├── vue-resource--001/      # Vue Resource example
-└── zzz--template/          # Base template for new examples
+├── 1/                      # Markdown Editor Example
+├── 2/                      # AJAX User List Example
+└── zzz/                    # Base template for new examples
 ```
 
 ## Technology Stack
@@ -35,8 +37,56 @@ vuebox/
 - **Vuex 4.1.0** - State management pattern for Vue.js
 
 ### Development Tools
+- **NPM** - Package manager
 - **Yarn** - Package manager (recommended)
+- **PNPM** - Fast, disk space efficient package manager
+- **Bun** - Extremely fast runtime and package manager
 - **Bower** - Package manager (deprecated, legacy support)
+
+## Installation and Setup
+
+### Prerequisites
+- Node.js and npm/yarn/pnpm/bun
+- Web server (Apache/Nginx) or local development server
+- Git for version control
+
+### Installation Steps
+
+1. **Clone the Repository**
+```bash
+sudo -u www-data git clone https://github.com/davidjimenez75/vuebox.git
+```
+
+2. **Choose Your Package Manager**
+
+#### OPTION 1 - INSTALLATION WITH NPM
+```bash
+sudo -u www-data npm install
+```
+
+#### OPTION 2 - INSTALLATION WITH YARN (Recommended)
+```bash
+sudo -u www-data yarn add axios bootstrap vue vuex vue-resource
+sudo -u www-data yarn install
+```
+
+#### OPTION 3 - INSTALLATION WITH PNPM
+```bash
+sudo -u www-data pnpm install
+```
+
+#### OPTION 4 - INSTALLATION WITH BUN
+```bash
+sudo -u www-data bun install
+```
+
+3. **Start Development Server**
+```bash
+# If using a local server
+php -S localhost:8000
+
+# Or place in web server directory (e.g., /var/www/html/)
+```
 
 ## Key Features
 
@@ -50,9 +100,13 @@ vuebox/
 - **Search Functionality**: Real-time filtering of examples
 - **Responsive Design**: Bootstrap-powered responsive interface
 
-### 2. Example Projects
+### 2. Current Example Projects
 
-#### Vue--001: Markdown Editor
+#### Project 1: Markdown Editor
+**Location**: `/1/`
+**Status**: Success (Green)
+**Description**: Markdown Editor Example
+
 A real-time markdown editor demonstrating:
 - **Two-way Data Binding**: Live preview of markdown content
 - **Computed Properties**: Real-time markdown compilation
@@ -76,7 +130,22 @@ methods: {
 }
 ```
 
-#### Template Structure (zzz--template)
+#### Project 2: AJAX User List
+**Location**: `/2/`
+**Status**: Success (Green)
+**Description**: List users by ajax using a remote API - RANDOM USER GENERATOR [randomuser.me](http://randomuser.me/)
+
+Demonstrates:
+- **HTTP Requests**: Fetching data from external APIs
+- **List Rendering**: Displaying dynamic data
+- **Async Operations**: Handling API responses
+- **External API Integration**: Working with randomuser.me API
+
+#### Template Structure (zzz)
+**Location**: `/zzz/`
+**Status**: Primary (Blue)
+**Description**: Reusable template folder, just made a copy and rename.
+
 Provides a standardized starting point for new examples:
 - Bootstrap integration
 - Vue.js setup
@@ -98,47 +167,13 @@ Examples can be categorized using special files:
 - Supports HTML content for rich formatting
 - Automatically displayed in the main dashboard
 
-## Installation and Setup
-
-### Prerequisites
-- Node.js and npm/yarn
-- Web server (Apache/Nginx) or local development server
-- Git for version control
-
-### Installation Steps
-
-1. **Clone the Repository**
-```bash
-git clone https://github.com/davidjimenez75/vuebox.git
-cd vuebox
-```
-
-2. **Install Dependencies with Yarn (Recommended)**
-```bash
-yarn add axios bootstrap vue vuex vue-resource
-yarn install
-```
-
-3. **Alternative: Bower Installation (Deprecated)**
-```bash
-bower install
-```
-
-4. **Start Development Server**
-```bash
-# If using a local server
-php -S localhost:8000
-
-# Or place in web server directory (e.g., /var/www/html/)
-```
-
 ## Development Workflow
 
 ### Creating New Examples
 
 1. **Copy Template**
 ```bash
-cp -r zzz--template/ your-new-example/
+cp -r zzz/ your-new-example/
 ```
 
 2. **Customize Content**
@@ -180,6 +215,54 @@ cp -r zzz--template/ your-new-example/
 - **Conditional Rendering**
 - **List Rendering**
 - **Form Input Bindings**
+- **HTTP Client Integration**
+- **External API Communication**
+
+## FAQ
+
+### How install Yarn in Debian/Ubuntu?
+
+**YARN - STABLE VERSION:**
+
+https://yarnpkg.com/en/docs/install#debian-stable
+
+```bash
+apt install curl
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt update && sudo apt install yarn
+yarn -v
+```
+
+**YARN - RELEASE CANDIDATE:**
+
+https://yarnpkg.com/en/docs/install#debian-rc
+
+```bash
+apt install curl
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ rc main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt update && sudo apt install yarn
+yarn -v
+```
+
+### Add color to folders?
+
+Copy one of the root folder index.*.txt files inside the subfolder.
+
+- index.danger.txt (red)
+- index.warning.txt (orange)
+- index.info.txt (light blue)
+- index.primary.txt (blue)
+- index.success.txt (green)
+
+### Add small description to folders?
+
+Create an index.txt file with your comments.
+
+### Can I add links to external URL's on the comments?
+
+Yes, just use a href html in the index.txt
 
 ## Browser Compatibility
 
@@ -212,7 +295,8 @@ MIT License - See project repository for full license details.
 - [Vuex Documentation](https://vuex.vuejs.org/en/)
 - [Bootstrap 5 Documentation](https://getbootstrap.com/docs/5.3/getting-started/introduction/)
 - [Vue.js Examples](https://vuejs.org/examples/)
+- [Random User Generator API](http://randomuser.me/)
 
 ---
 
-*This documentation was generated to provide comprehensive understanding of the VUEBOX project structure, features, and educational objectives.*
+*This documentation was updated on 2025.06.01 to reflect the current project structure, installation options, and available examples.*
