@@ -190,7 +190,7 @@
                 <div class="table-responsive">                    <table class="table align-middle custom-table">
                         <thead class="table-dark">
                             <tr>
-                                <th scope="col" style="width: 100%">Project & Description</th>
+                                <th scope="col" style="width: 100%">Folder Name & Description</th>
                             </tr>
                         </thead>
                         <tbody id="list">

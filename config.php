@@ -157,12 +157,12 @@ $tags_colors = [
 $background_colors = array(
     'green' => '#d4edda',      // Light green background
     'blue' => '#d1ecf1',       // Light blue background 
-    'red' => '#f8d7da',        // Light red background
+    'red' => '#f5b5b5',        // Darker and more visible red background
     'yellow' => '#fff3cd',     // Light yellow background
     'purple' => '#e2d9f3',     // Light purple background
     'orange' => '#ffe8d1',     // Light orange background
     'pink' => '#f8d7e9',       // Light pink background
-    'gray' => '#f8f9fa'        // Light gray background   
+    'gray' => '#c0c2c4'        // More visible and darker light gray background   
 );
 
 
