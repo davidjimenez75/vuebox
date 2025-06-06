@@ -42,6 +42,7 @@
         /* Search highlight styles */
         .search-highlight {
             background-color: yellow;
+            color: black !important;
             font-weight: bold;
         }
         
@@ -63,6 +64,57 @@
             .navbar .d-flex {
                 display: none !important;
             }
+        }
+        
+        /* Project row styling */
+        .project-row {
+            transition: all 0.2s ease;
+        }
+        
+        /* Override Bootstrap table row backgrounds to ensure custom colors show */
+        .table tbody tr.project-row {
+            background-color: inherit !important;
+        }
+        
+        .table-striped tbody tr.project-row:nth-of-type(odd) {
+            background-color: inherit !important;
+        }
+        
+        .table-hover tbody tr.project-row:hover {
+            background-color: inherit !important;
+            filter: brightness(0.95);
+        }
+        
+        /* First line styling */
+        .project-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Description styling */
+        .project-description {
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        
+        /* Tag styling */
+        .project-tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            margin: 0.1rem 0.2rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .project-tag:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-decoration: none;
         }
     </style>
 
@@ -138,18 +190,26 @@
                     <table class="table table-striped table-hover align-middle">
                         <thead class="table-dark">
                             <tr>
-                                <th scope="col" style="width: 20%">Status</th>
-                                <th scope="col" style="width: 80%">Script & Description</th>
+                                <th scope="col" style="width: 100%">Project & Description</th>
                             </tr>
                         </thead>
                         <tbody id="list">
-                            <tr v-for="(value, index) in dirs" :key="index" :class="value.visible">
-                                <td class="text-center">
-                                    <span :class="'badge ' + getBadgeClass(value.status)">{{ getStatusText(value.status) }}</span>
-                                </td>
-                                <td class="text-start">
-                                    <a :href="value.dir" class="text-decoration-none fw-semibold" v-html="highlightText(value.dir)"></a>
-                                    <span v-if="value.description" class="text-muted ms-2" v-html="highlightText(value.description)"></span>
+                            <tr v-for="(value, index) in dirs" :key="index" :class="value.visible + ' project-row'" :style="getRowStyle(value)">
+                                <td class="text-start p-3">
+                                    <div class="project-title">
+                                        <span class="text-muted me-2">[{{ value.dir }}]</span>
+                                        <a :href="value.dir" class="text-decoration-none" v-html="highlightText(value.title)" :style="getTitleStyle(value)"></a>
+                                    </div>
+                                    <div v-if="value.description" class="project-description" v-html="formatDescription(value.description)"></div>
+                                    <div v-if="value.tags && value.tags.length > 0" class="mt-2">
+                                        <span v-for="tag in value.tags" :key="tag" 
+                                              class="project-tag" 
+                                              :style="getTagStyle(value, tag)"
+                                              :title="getTagTooltip(tag)"
+                                              @click="searchTag(tag)"
+                                              v-html="highlightText(tag)">
+                                        </span>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -177,51 +237,77 @@
                 return {
                     searchstr: "",
                     dirs: <?php
+                            // Include color configuration
+                            require_once 'config.php';
+                            
                             // GET DIRECTORY TO VUE 3 DATA ARRAY
-                            $dir = '.';
-                            $descriptionFile = "index.txt";
-
-                            $a_bg = array('primary', 'success', 'warning', 'danger', 'info', 'muted');
-                            $ignoredFolders = array('.', '..', '.git', '.idea', '.svn', 'css', 'images', 'js', 'vendor', 'images', 'node_modules');
-
+                            $ignoredFolders = array('.', '..', '.git', '.idea', '.svn', 'css', 'images', 'js', 'vendor', 'node_modules');
                             $a_dirs = array();
 
                             $directories = glob('*', GLOB_ONLYDIR);
                             natsort($directories);
+                            
                             foreach ($directories as $dir) {
                                 if (!in_array($dir, $ignoredFolders)) {
-                                    $a_dirs[]["dir"] = (string) basename($dir);
-                                }
-                            }
-
-                            foreach ($a_dirs as $key => $value) {
-                                if (file_exists("./" . $value["dir"] . "/index.danger.txt")) {
-                                    $a_dirs[$key]["status"] = "danger";
-                                } elseif (file_exists("./" . $value["dir"] . "/index.warning.txt")) {
-                                    $a_dirs[$key]["status"] = "warning";
-                                } elseif (file_exists("./" . $value["dir"] . "/index.info.txt")) {
-                                    $a_dirs[$key]["status"] = "info";
-                                } elseif (file_exists("./" . $value["dir"] . "/index.primary.txt")) {
-                                    $a_dirs[$key]["status"] = "primary";
-                                } elseif (file_exists("./" . $value["dir"] . "/index.success.txt")) {
-                                    $a_dirs[$key]["status"] = "success";
-                                } else {
-                                    $a_dirs[$key]["status"] = "muted";
-                                }
-
-                                // VISIBLE CLASS FOR SEARCH
-                                $a_dirs[$key]["visible"] = "visible";
-
-                                // DESCRIPTIONS FOR EVERY FOLDER
-                                $description_file = "index.txt";
-                                if (file_exists("./" . $value["dir"] . "/$description_file")) {
-                                    $a_dirs[$key]["description"] = file_get_contents("./" . $value["dir"] . "/$description_file");
-                                    $a_dirs[$key]["description"] = nl2br($a_dirs[$key]["description"]);
+                                    $project = array();
+                                    $project["dir"] = (string) basename($dir);
+                                    $project["visible"] = "visible";
+                                    $project["title"] = $project["dir"]; // Default title
+                                    $project["description"] = "";
+                                    $project["tags"] = array();
+                                    $project["background_color"] = "#ffffff"; // Default white background
+                                    
+                                    // Read index.txt file
+                                    $index_file = "./" . $dir . "/index.txt";
+                                    if (file_exists($index_file)) {
+                                        $content = file_get_contents($index_file);
+                                        $lines = explode("\n", $content);
+                                        
+                                        // First line is the title
+                                        if (!empty($lines[0])) {
+                                            $project["title"] = trim($lines[0]);
+                                        }
+                                        
+                                        // Process remaining lines for description and tags
+                                        $description_lines = array();
+                                        $functional_tags = array();
+                                        
+                                        for ($i = 1; $i < count($lines); $i++) {
+                                            $line = trim($lines[$i]);
+                                            if (!empty($line)) {
+                                                // Extract tags from the line
+                                                preg_match_all('/#(\w+)/i', $line, $matches);
+                                                if (!empty($matches[1])) {
+                                                    foreach ($matches[1] as $tag) {
+                                                        $tag_lower = strtolower($tag);
+                                                        
+                                                        // Check if this tag defines a background color
+                                                        if (array_key_exists($tag_lower, $background_colors)) {
+                                                            $project["background_color"] = $background_colors[$tag_lower];
+                                                        } else {
+                                                            // This is a functional tag, add it to the list
+                                                            $functional_tags[] = '#' . $tag_lower;
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                // Add line to description (will be processed to remove tags for display)
+                                                $description_lines[] = $line;
+                                            }
+                                        }
+                                        
+                                        $project["tags"] = array_unique($functional_tags);
+                                        $project["description"] = implode("<br>", $description_lines);
+                                    }
+                                    
+                                    $a_dirs[] = $project;
                                 }
                             }
 
                             echo json_encode($a_dirs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-                            ?>
+                            ?>,
+                    backgroundColors: <?php echo json_encode($background_colors, JSON_UNESCAPED_UNICODE); ?>,
+                    tagsColors: <?php echo json_encode($tags_colors, JSON_UNESCAPED_UNICODE); ?>
                 }
             },
             mounted() {
@@ -232,40 +318,72 @@
                 }
             },
             methods: {
-                getBadgeClass(status) {
-                    switch(status) {
-                        case "danger": return "bg-danger";
-                        case "warning": return "bg-warning text-dark";
-                        case "info": return "bg-info text-dark";
-                        case "primary": return "bg-primary";
-                        case "success": return "bg-success";
-                        default: return "bg-secondary";
-                    }
+                getRowStyle(project) {
+                    return {
+                        backgroundColor: project.background_color || '#ffffff',
+                        color: '#212529' // Default dark text
+                    };
                 },
-                getStatusText(status) {
-                    switch(status) {
-                        case "danger": return "Error";
-                        case "warning": return "Warning";
-                        case "info": return "Info";
-                        case "primary": return "Primary";
-                        case "success": return "Success";
-                        default: return "Normal";
-                    }
+                getTitleStyle(project) {
+                    return {
+                        color: '#212529' // Default dark text
+                    };
                 },
-                thClassValue(status) {
-                    if (status == "danger") {
-                        return ('bg-danger text-white')
-                    } else if (status == "warning") {
-                        return ('bg-warning text-dark')
-                    } else if (status == "info") {
-                        return ('bg-info text-dark')
-                    } else if (status == "primary") {
-                        return ('bg-primary text-white')
-                    } else if (status == "success") {
-                        return ('bg-success text-white')
-                    } else {
-                        return ('bg-light text-dark')
+                getTagStyle(project, tag) {
+                    // Remove the # from tag to get the tag name
+                    const tagName = tag.replace('#', '').toLowerCase();
+                    
+                    // Check if this tag has a specific color defined
+                    if (this.tagsColors[tagName]) {
+                        const tagColor = this.tagsColors[tagName].color;
+                        return this.getTagColorStyle(tagColor);
                     }
+                    
+                    // Default tag style
+                    return {
+                        backgroundColor: '#6c757d',
+                        color: '#ffffff'
+                    };
+                },
+                getTagColorStyle(color) {
+                    const colorMap = {
+                        'red': { backgroundColor: '#dc3545', color: '#ffffff' },
+                        'orange': { backgroundColor: '#fd7e14', color: '#ffffff' },
+                        'yellow': { backgroundColor: '#ffc107', color: '#212529' },
+                        'green': { backgroundColor: '#28a745', color: '#ffffff' },
+                        'blue': { backgroundColor: '#007bff', color: '#ffffff' },
+                        'purple': { backgroundColor: '#6f42c1', color: '#ffffff' },
+                        'pink': { backgroundColor: '#e83e8c', color: '#ffffff' },
+                        'gray': { backgroundColor: '#6c757d', color: '#ffffff' }
+                    };
+                    
+                    return colorMap[color] || { backgroundColor: '#6c757d', color: '#ffffff' };
+                },
+                getTagTooltip(tag) {
+                    // Remove the # from tag to get the tag name
+                    const tagName = tag.replace('#', '').toLowerCase();
+                    
+                    // Check if this tag has a description defined
+                    if (this.tagsColors[tagName] && this.tagsColors[tagName].name) {
+                        return this.tagsColors[tagName].name;
+                    }
+                    
+                    // Default tooltip if no description is found
+                    return `Tag: ${tag}`;
+                },
+                formatDescription(description) {
+                    if (!description) return '';
+                    
+                    // Remove tags from description for display, but keep the HTML structure
+                    let formatted = description.replace(/#\w+/g, '').trim();
+                    
+                    // Apply search highlighting if needed
+                    return this.highlightText(formatted);
+                },
+                searchTag(tag) {
+                    // Set the search string to the clicked tag and trigger search
+                    this.searchstr = tag;
+                    this.search(tag);
                 },
                 stripHtml(html) {
                     if (!html) return '';
@@ -307,10 +425,14 @@
                     
                     this.dirs.forEach(element => {
                         const searchInDir = element.dir.toLowerCase().includes(searchstr.toLowerCase());
+                        const searchInTitle = element.title && 
+                            element.title.toLowerCase().includes(searchstr.toLowerCase());
                         const searchInDescription = element.description && 
                             this.stripHtml(element.description).toLowerCase().includes(searchstr.toLowerCase());
+                        const searchInTags = element.tags && 
+                            element.tags.some(tag => tag.toLowerCase().includes(searchstr.toLowerCase()));
                         
-                        if (searchInDir || searchInDescription) {
+                        if (searchInDir || searchInTitle || searchInDescription || searchInTags) {
                             element.visible = "visible";
                         } else {
                             element.visible = "d-none";

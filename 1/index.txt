@@ -1,2 +1,2 @@
 Markdown Editor Example ✅
-#Markdown #Vue #Marked #Lodash #Green
+#markdown #vue #marked #lodash #green
