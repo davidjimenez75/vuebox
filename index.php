@@ -64,25 +64,33 @@
             .navbar .d-flex {
                 display: none !important;
             }
-        }
-        
-        /* Project row styling */
+        }        /* Project row styling */
         .project-row {
             transition: all 0.2s ease;
+        }        /* Custom table styling to replace Bootstrap table-striped and table-hover */
+        .custom-table tbody tr.project-row:nth-of-type(even) {
+            background-color: rgba(0,0,0,0.05);
+        }
+        
+        .custom-table tbody tr.project-row:hover {
+            filter: brightness(0.95);
         }
         
         /* Override Bootstrap table row backgrounds to ensure custom colors show */
-        .table tbody tr.project-row {
+        .table tbody tr.project-row[style*="background-color"] {
             background-color: inherit !important;
         }
         
-        .table-striped tbody tr.project-row:nth-of-type(odd) {
+        .table-striped tbody tr.project-row[style*="background-color"]:nth-of-type(odd) {
             background-color: inherit !important;
         }
         
-        .table-hover tbody tr.project-row:hover {
+        .table-striped tbody tr.project-row[style*="background-color"]:nth-of-type(even) {
             background-color: inherit !important;
-            filter: brightness(0.95);
+        }
+        
+        .table-hover tbody tr.project-row[style*="background-color"]:hover {
+            filter: brightness(0.95) !important;
         }
         
         /* First line styling */
@@ -186,8 +194,7 @@
 
         <div class="container">
             <div class="starter-template">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover align-middle">
+                <div class="table-responsive">                    <table class="table align-middle custom-table">
                         <thead class="table-dark">
                             <tr>
                                 <th scope="col" style="width: 100%">Project & Description</th>
@@ -274,20 +281,27 @@
                                         
                                         for ($i = 1; $i < count($lines); $i++) {
                                             $line = trim($lines[$i]);
-                                            if (!empty($line)) {
-                                                // Extract tags from the line
+                                            if (!empty($line)) {                                                // Extract tags from the line
                                                 preg_match_all('/#(\w+)/i', $line, $matches);
                                                 if (!empty($matches[1])) {
                                                     foreach ($matches[1] as $tag) {
                                                         $tag_lower = strtolower($tag);
                                                         
-                                                        // Check if this tag defines a background color
+                                                        // Check if this tag directly matches a color in background_colors
                                                         if (array_key_exists($tag_lower, $background_colors)) {
                                                             $project["background_color"] = $background_colors[$tag_lower];
-                                                        } else {
-                                                            // This is a functional tag, add it to the list
-                                                            $functional_tags[] = '#' . $tag_lower;
                                                         }
+                                                        // Also check if tag exists in tags_colors and get its color
+                                                        elseif (array_key_exists($tag_lower, $tags_colors)) {
+                                                            $tag_color = $tags_colors[$tag_lower]['color'];
+                                                            // Use the tag's color to get the background color
+                                                            if (array_key_exists($tag_color, $background_colors)) {
+                                                                $project["background_color"] = $background_colors[$tag_color];
+                                                            }
+                                                        }
+                                                        
+                                                        // Add all tags to the functional tags list for display
+                                                        $functional_tags[] = '#' . $tag_lower;
                                                     }
                                                 }
                                                 
@@ -317,8 +331,7 @@
                     loadingElement.style.display = 'none';
                 }
             },
-            methods: {
-                getRowStyle(project) {
+            methods: {                getRowStyle(project) {
                     return {
                         backgroundColor: project.background_color || '#ffffff',
                         color: '#212529' // Default dark text

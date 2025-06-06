@@ -112,10 +112,42 @@ $tags_colors = [
     'marketing' => [
         'name' => 'Marketing - Digital marketing strategies',
         'color' => 'blue'
-    ],
-    'other' => [
+    ],    'other' => [
         'name' => 'Other - Miscellaneous projects',
         'color' => 'blue'
+    ],
+    // Color tags for direct color assignment
+    'green' => [
+        'name' => 'Green - Projects with green theme',
+        'color' => 'green'
+    ],
+    'blue' => [
+        'name' => 'Blue - Projects with blue theme',
+        'color' => 'blue'
+    ],
+    'red' => [
+        'name' => 'Red - Projects with red theme',
+        'color' => 'red'
+    ],
+    'yellow' => [
+        'name' => 'Yellow - Projects with yellow theme',
+        'color' => 'yellow'
+    ],
+    'purple' => [
+        'name' => 'Purple - Projects with purple theme',
+        'color' => 'purple'
+    ],
+    'orange' => [
+        'name' => 'Orange - Projects with orange theme',
+        'color' => 'orange'
+    ],
+    'pink' => [
+        'name' => 'Pink - Projects with pink theme',
+        'color' => 'pink'
+    ],
+    'gray' => [
+        'name' => 'Gray - Projects with gray theme',
+        'color' => 'gray'
     ]
 ];
 
