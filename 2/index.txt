@@ -1,2 +1,3 @@
-List users by ajax using a remote API 
-RANDOM USER GENERATOR <a href="http://randomuser.me/" target="_blank">randomuser.me</a>
+List users by ajax using a remote API ✅
+Random User Generated API by: <a href="http://randomuser.me/" target="_blank">randomuser.me</a>
+#Vue #Axios #API #Random #Green
