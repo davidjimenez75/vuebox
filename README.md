@@ -46,6 +46,10 @@ Install dependencies with Bun (extremely fast runtime and package manager):
 sudo -u www-data bun install
 ```
 
+## Contributing & Feature Ideas
+
+We welcome contributions and ideas to improve VUEBOX!
+If you have suggestions for new features or improvements to existing examples, please check out our [list of feature ideas](./FEATURE_IDEAS.md). You can contribute by opening an issue or submitting a pull request.
 
 ## FAQ
 
@@ -91,3 +95,4 @@ Create an index.txt file with your comments.
 ### Can I add links to external URL's on the comments?
 
 Yes, just use a href html in the index.txt
+```
