@@ -67,30 +67,23 @@
         }        /* Project row styling */
         .project-row {
             transition: all 0.2s ease;
-        }        /* Custom table styling to replace Bootstrap table-striped and table-hover */
-        .custom-table tbody tr.project-row:nth-of-type(even) {
-            background-color: rgba(0,0,0,0.05);
+        }        /* Override Bootstrap 5 CSS variables for table backgrounds */
+        .custom-table {
+            --bs-table-bg: transparent;
+        }
+        
+        /* Custom table styling - ensure background colors are applied */
+        .custom-table tbody tr.project-row {
+            /* Let inline styles take precedence */
         }
         
         .custom-table tbody tr.project-row:hover {
             filter: brightness(0.95);
         }
         
-        /* Override Bootstrap table row backgrounds to ensure custom colors show */
-        .table tbody tr.project-row[style*="background-color"] {
-            background-color: inherit !important;
-        }
-        
-        .table-striped tbody tr.project-row[style*="background-color"]:nth-of-type(odd) {
-            background-color: inherit !important;
-        }
-        
-        .table-striped tbody tr.project-row[style*="background-color"]:nth-of-type(even) {
-            background-color: inherit !important;
-        }
-        
-        .table-hover tbody tr.project-row[style*="background-color"]:hover {
-            filter: brightness(0.95) !important;
+        /* For rows without custom background colors, add subtle striping */
+        .custom-table tbody tr.project-row:nth-of-type(even):not([style*="background-color"]) {
+            background-color: rgba(0,0,0,0.05);
         }
         
         /* First line styling */
