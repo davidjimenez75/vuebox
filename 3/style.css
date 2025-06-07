@@ -64,7 +64,7 @@ body {
 }
 
 .wysiwyg-editor ul li {
-    color: #dc3545 !important;
+    color: #dc3545;
     position: relative;
     margin: 8px 0;
     display: block;
@@ -195,7 +195,7 @@ body {
 
 /* Default subtask state [ ] - RED */
 .preview-content ul li {
-    color: #dc3545 !important;
+    color: #dc3545;
 }
 
 /* Work in Progress subtasks [>] - ORANGE */
@@ -233,7 +233,7 @@ body {
 
 /* Default WYSIWYG subtask [ ] - RED */
 .wysiwyg-editor ul li {
-    color: #dc3545 !important;
+    color: #dc3545;
 }
 
 /* WYSIWYG Work in Progress [>] - ORANGE */

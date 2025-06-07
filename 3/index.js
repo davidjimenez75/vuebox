@@ -158,7 +158,20 @@ createApp({
                         let text = li.replace(/<li[^>]*>(.*?)<\/li>/gis, '$1')
                                     .replace(/<[^>]*>/g, '')
                                     .replace(/\s+/g, ' ')
-                                    .trim();                        // Check if this text was originally a checkbox item
+                                    .trim();                        // Check if text already contains checkbox notation first
+                        const alreadyHasCheckbox = /\[[x>\s]\]/.test(text);
+                        
+                        if (alreadyHasCheckbox) {
+                            // Text already has checkbox, return as-is
+                            return `- ${text}`;
+                        }
+                        
+                        // Check context-based detection for common task patterns
+                        const looksLikeTask = /^(Create|Configure|Test|Design|Implement|Add|Perform|Write|Prepare|Review|Make sure|Don't forget)/i.test(text) ||
+                                            content.toLowerCase().includes('subtask') ||
+                                            match.toLowerCase().includes('subtask');
+                        
+                        // If no checkbox present, check if it was originally a checkbox item
                         const wasCheckbox = checkboxItems.find(checkboxItem => {
                             const textLower = text.toLowerCase();
                             const checkboxLower = checkboxItem.text.toLowerCase();
@@ -167,17 +180,7 @@ createApp({
                                    textLower === checkboxLower;
                         });
                         
-                        // Also check context-based detection for common task patterns
-                        const looksLikeTask = /^(Create|Configure|Test|Design|Implement|Add|Perform|Write|Prepare|Review|Make sure|Don't forget)/i.test(text) ||
-                                            content.toLowerCase().includes('subtask') ||
-                                            match.toLowerCase().includes('subtask');
-                        
-                        // Check if text already contains checkbox notation
-                        const alreadyHasCheckbox = /^\[[x>\s]\]/.test(text);
-                        
-                        if (alreadyHasCheckbox) {
-                            return `- ${text}`;
-                        } else if (wasCheckbox) {
+                        if (wasCheckbox) {
                             return `- ${wasCheckbox.status} ${text}`;
                         } else if (looksLikeTask) {
                             return `- [ ] ${text}`;
@@ -330,26 +333,28 @@ createApp({
                     h2.style.color = '#dc3545';
                     h2.style.borderBottomColor = '#dc3545';
                 }
-            });
-            
-            // Handle subtask list items (li elements)
+            });            // Handle subtask list items (li elements)
             const liElements = container.querySelectorAll('ul li');
             liElements.forEach(li => {
-                const text = li.textContent;
-                li.className = ''; // Reset classes
+                const text = li.textContent.trim();
                 
-                if (text.includes('[x]')) {
+                // Remove all existing classes and styles
+                li.className = '';
+                li.removeAttribute('style');
+                
+                // More specific checkbox detection using regex
+                if (/\[x\]/.test(text)) {
                     li.classList.add('status-completed');
-                    li.style.color = '#28a745';
-                } else if (text.includes('[>]')) {
+                    li.setAttribute('style', 'color: #28a745 !important; font-weight: bold !important;');
+                } else if (/\[>\]/.test(text)) {
                     li.classList.add('status-progress');
-                    li.style.color = '#fd7e14';
-                } else if (text.includes('[ ]')) {
+                    li.setAttribute('style', 'color: #fd7e14 !important; font-weight: bold !important;');
+                } else if (/\[\s\]/.test(text)) {
                     li.classList.add('status-todo');
-                    li.style.color = '#dc3545';
+                    li.setAttribute('style', 'color: #dc3545 !important; font-weight: bold !important;');
                 } else {
                     // Regular list item (Comments section)
-                    li.style.color = '#343a40';
+                    li.setAttribute('style', 'color: #343a40 !important;');
                 }
             });
         },
