@@ -6,13 +6,15 @@
 
 This is the first task of the project. It includes initial setup and basic structure.
 
-- I need to review all configuration files
-- Make sure dependencies are correct
-- Test that everything works
+I need to review all configuration files
+Make sure dependencies are correct
+Test that everything works
 
 - [x] Create folder structure
 - [x] Configure base files
+- [ ] Solve color bug on subtasks
 - [>] Test basic functionality
+
 
 --------------------------------------------------------------------------------
 

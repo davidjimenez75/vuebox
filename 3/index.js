@@ -47,12 +47,12 @@ createApp({
                     this.convertMarkdownToWysiwyg();
                 } else {
                     console.warn('Could not load TODO.md, using default content');
-                    this.markdownContent = this.getDefaultContent();
+                    this.markdownContent = await this.getDefaultContent();
                     this.convertMarkdownToWysiwyg();
                 }
             } catch (error) {
                 console.warn('Error loading file:', error);
-                this.markdownContent = this.getDefaultContent();
+                this.markdownContent = await this.getDefaultContent();
                 this.convertMarkdownToWysiwyg();
             }
         },
@@ -98,6 +98,7 @@ createApp({
                     mangle: false
                 });
                 
+                // Parse markdown directly without emoji replacement
                 this.wysiwygContent = marked.parse(this.markdownContent);
             } else {
                 this.wysiwygContent = '';
@@ -469,7 +470,18 @@ createApp({
             }, 3000);
         },
         
-        getDefaultContent() {
+        async getDefaultContent() {
+            try {
+                // Try to read from TODO.md file first
+                const response = await fetch('TODO.md');
+                if (response.ok) {
+                    return await response.text();
+                }
+            } catch (error) {
+                console.warn('Could not read TODO.md for default content:', error);
+            }
+            
+            // Fallback to hardcoded content if file cannot be read
             return `# Task List
 
 ${'-'.repeat(80)}
