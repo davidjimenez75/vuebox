@@ -13,7 +13,9 @@ createApp({
                 subtasks: ''
             }
         }
-    },    computed: {
+    },
+    
+    computed: {
         compiledMarkdown() {
             // Configure marked for better list rendering
             marked.setOptions({
@@ -35,13 +37,15 @@ createApp({
             });
         }
     },
+    
     methods: {
         async loadFile() {
             try {
                 const response = await fetch('TODO.md');
                 if (response.ok) {
                     this.markdownContent = await response.text();
-                    this.convertMarkdownToWysiwyg();                } else {
+                    this.convertMarkdownToWysiwyg();
+                } else {
                     console.warn('Could not load TODO.md, using default content');
                     this.markdownContent = this.getDefaultContent();
                     this.convertMarkdownToWysiwyg();
@@ -63,10 +67,12 @@ createApp({
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-              // Show success message
+            
+            // Show success message
             this.showAlert('File saved successfully', 'success');
         },
-          toggleView() {
+        
+        toggleView() {
             if (this.viewMode === 'wysiwyg') {
                 // Switching to code mode
                 this.convertWysiwygToMarkdown();
@@ -79,7 +85,9 @@ createApp({
             
             // Force Vue to re-render the components
             this.$forceUpdate();
-        },        convertMarkdownToWysiwyg() {
+        },
+        
+        convertMarkdownToWysiwyg() {
             // Convert markdown to HTML for WYSIWYG editor
             if (this.markdownContent) {
                 // Configure marked options for better parsing
@@ -105,7 +113,9 @@ createApp({
                     this.applyCheckboxStyling(wysiwygDiv);
                 }
             });
-        },convertWysiwygToMarkdown() {
+        },
+        
+        convertWysiwygToMarkdown() {
             // Convert HTML from WYSIWYG editor to Markdown
             const wysiwygDiv = document.querySelector('.wysiwyg-editor');
             if (wysiwygDiv) {
@@ -122,10 +132,13 @@ createApp({
                 console.log('Original HTML:', htmlContent);
                 console.log('Converted Markdown:', this.markdownContent);
             }
-        },        htmlToMarkdown(html, originalMarkdown = '') {
+        },
+        
+        htmlToMarkdown(html, originalMarkdown = '') {
             // Enhanced HTML to Markdown conversion that preserves line breaks and checkboxes
             let markdown = html;
-              // Extract checkbox items from original markdown for reference
+            
+            // Extract checkbox items from original markdown for reference
             const checkboxItems = [];
             if (originalMarkdown) {
                 // Match all checkbox types: [ ], [x], [>]
@@ -149,7 +162,9 @@ createApp({
             // Handle div elements that browsers create for line breaks
             markdown = markdown.replace(/<div[^>]*><br[^>]*><\/div>/gi, '\n\n');
             markdown = markdown.replace(/<div[^>]*>\s*<\/div>/gi, '\n\n');
-            markdown = markdown.replace(/<div[^>]*>(.*?)<\/div>/gi, '$1\n\n');            // Handle lists first (before removing other tags)
+            markdown = markdown.replace(/<div[^>]*>(.*?)<\/div>/gi, '$1\n\n');
+            
+            // Handle lists first (before removing other tags)
             // Convert unordered lists with checkbox detection
             markdown = markdown.replace(/<ul[^>]*>(.*?)<\/ul>/gis, (match, content) => {
                 const listItems = content.match(/<li[^>]*>(.*?)<\/li>/gis);
@@ -158,11 +173,17 @@ createApp({
                         let text = li.replace(/<li[^>]*>(.*?)<\/li>/gis, '$1')
                                     .replace(/<[^>]*>/g, '')
                                     .replace(/\s+/g, ' ')
-                                    .trim();                        // Check if text already contains checkbox notation first
-                        const alreadyHasCheckbox = /\[[x>\s]\]/.test(text);
+                                    .trim();
                         
-                        if (alreadyHasCheckbox) {
-                            // Text already has checkbox, return as-is
+                        // FIXED: Decode HTML entities FIRST before checking for checkboxes
+                        text = text.replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&')
+                                  .replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&apos;/g, "'");
+                        
+                        // Check if text already contains checkbox notation first
+                        const checkboxMatch = text.match(/^\[([x>\s])\]\s*(.*)$/);
+                        
+                        if (checkboxMatch) {
+                            // Text already has checkbox, return as-is without duplication
                             return `- ${text}`;
                         }
                         
@@ -252,7 +273,8 @@ createApp({
             
             // Trim and ensure proper ending
             markdown = markdown.trim();
-              return markdown;
+            
+            return markdown;
         },
         
         similarity(str1, str2) {
@@ -293,13 +315,15 @@ createApp({
             
             return matrix[str2.length][str1.length];
         },
-          updateFromWysiwyg() {
+        
+        updateFromWysiwyg() {
             // Convert WYSIWYG content to markdown and update preview
             this.convertWysiwygToMarkdown();
             // Update preview with latest content
             this.updateFromMarkdown();
         },
-          updateFromMarkdown() {
+        
+        updateFromMarkdown() {
             // Update preview with latest markdown content
             this.previewContent = marked.parse(this.markdownContent || '');
             
@@ -310,8 +334,10 @@ createApp({
                     this.applyCheckboxStyling(previewDiv);
                 }
             });
-        },        applyCheckboxStyling(container) {
-            // Apply styling based on checkbox states in text content
+        },
+        
+        applyCheckboxStyling(container) {
+            // FIXED: Apply styling based on checkbox states in text content
             // Color scheme: [ ] = Red (TO-DO), [x] = Green (Completed), [>] = Orange (Work in Progress)
             
             // Handle task titles (h2 elements)
@@ -322,18 +348,20 @@ createApp({
                 
                 if (text.includes('[x]')) {
                     h2.classList.add('status-completed');
-                    h2.style.color = '#28a745';
+                    h2.style.color = '#28a745 !important';
                     h2.style.borderBottomColor = '#28a745';
                 } else if (text.includes('[>]')) {
                     h2.classList.add('status-progress');
-                    h2.style.color = '#fd7e14';
+                    h2.style.color = '#fd7e14 !important';
                     h2.style.borderBottomColor = '#fd7e14';
                 } else {
                     h2.classList.add('status-todo');
-                    h2.style.color = '#dc3545';
+                    h2.style.color = '#dc3545 !important';
                     h2.style.borderBottomColor = '#dc3545';
                 }
-            });            // Handle subtask list items (li elements)
+            });
+            
+            // Handle subtask list items (li elements)
             const liElements = container.querySelectorAll('ul li');
             liElements.forEach(li => {
                 const text = li.textContent.trim();
@@ -342,7 +370,7 @@ createApp({
                 li.className = '';
                 li.removeAttribute('style');
                 
-                // More specific checkbox detection using regex
+                // FIXED: More specific checkbox detection using regex
                 if (/\[x\]/.test(text)) {
                     li.classList.add('status-completed');
                     li.setAttribute('style', 'color: #28a745 !important; font-weight: bold !important;');
@@ -376,7 +404,8 @@ createApp({
         insertTask() {
             let taskMarkdown = '\n' + '-'.repeat(80) + '\n\n';
             taskMarkdown += `## ${this.newTask.title}\n\n`;
-              if (this.newTask.description) {
+            
+            if (this.newTask.description) {
                 taskMarkdown += `### Description\n${this.newTask.description}\n\n`;
             }
             
@@ -438,7 +467,9 @@ createApp({
                     alertDiv.parentNode.removeChild(alertDiv);
                 }
             }, 3000);
-        },        getDefaultContent() {
+        },
+        
+        getDefaultContent() {
             return `# Task List
 
 ${'-'.repeat(80)}
