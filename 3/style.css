@@ -49,11 +49,11 @@ body {
 
 /* WYSIWYG editor styling */
 .wysiwyg-editor h2 {
-    color: #007bff !important;
+    color: #dc3545 !important;
     font-weight: bold;
     margin-top: 20px;
     margin-bottom: 15px;
-    border-bottom: 2px solid #007bff;
+    border-bottom: 2px solid #dc3545;
     padding-bottom: 5px;
 }
 
@@ -108,14 +108,60 @@ body {
     padding-bottom: 10px;
 }
 
-/* Task titles (h2) in BLUE */
+/* Task titles (h2) with different checkbox states */
 .preview-content h2 {
-    color: #007bff !important;
     margin-top: 30px;
     margin-bottom: 15px;
     font-weight: bold;
-    border-bottom: 2px solid #007bff;
+    border-bottom: 2px solid;
     padding-bottom: 5px;
+}
+
+/* Default state - Not started [ ] - RED */
+.preview-content h2,
+.preview-content h2.status-todo {
+    color: #dc3545 !important;
+    border-bottom-color: #dc3545;
+}
+
+/* Work in Progress [>] - ORANGE */
+.preview-content h2.status-progress {
+    color: #fd7e14 !important;
+    border-bottom-color: #fd7e14;
+}
+
+/* Completed [x] - GREEN */
+.preview-content h2.status-completed {
+    color: #28a745 !important;
+    border-bottom-color: #28a745;
+}
+
+/* WYSIWYG editor task titles */
+.wysiwyg-editor h2 {
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid;
+    padding-bottom: 5px;
+}
+
+/* Default WYSIWYG - RED */
+.wysiwyg-editor h2,
+.wysiwyg-editor h2.status-todo {
+    color: #dc3545 !important;
+    border-bottom-color: #dc3545;
+}
+
+/* WYSIWYG Work in Progress [>] - ORANGE */
+.wysiwyg-editor h2.status-progress {
+    color: #fd7e14 !important;
+    border-bottom-color: #fd7e14;
+}
+
+/* WYSIWYG Completed [x] - GREEN */
+.wysiwyg-editor h2.status-completed {
+    color: #28a745 !important;
+    border-bottom-color: #28a745;
 }
 
 .preview-content h3 {
@@ -131,7 +177,7 @@ body {
     margin: 30px 0;
 }
 
-/* Subtask lists in RED */
+/* Subtask lists with different checkbox states */
 .preview-content ul {
     padding-left: 20px;
     list-style-type: none;
@@ -139,7 +185,6 @@ body {
 }
 
 .preview-content ul li {
-    color: #dc3545 !important;
     font-weight: 500;
     margin-bottom: 8px;
     display: block;
@@ -148,13 +193,65 @@ body {
     line-height: 1.5;
 }
 
+/* Default subtask state [ ] - RED */
+.preview-content ul li {
+    color: #dc3545 !important;
+}
+
+/* Work in Progress subtasks [>] - ORANGE */
+.preview-content ul li.status-progress {
+    color: #fd7e14 !important;
+}
+
+/* Completed subtasks [x] - GREEN */
+.preview-content ul li.status-completed {
+    color: #28a745 !important;
+}
+
 .preview-content ul li::before {
     content: "•";
-    color: #dc3545;
     font-weight: bold;
     position: absolute;
     left: 0;
     top: 0;
+    color: inherit;
+}
+
+/* WYSIWYG editor subtasks */
+.wysiwyg-editor ul {
+    list-style: none;
+    padding-left: 20px;
+    margin: 15px 0;
+}
+
+.wysiwyg-editor ul li {
+    position: relative;
+    margin: 8px 0;
+    display: block;
+    font-weight: 500;
+}
+
+/* Default WYSIWYG subtask [ ] - RED */
+.wysiwyg-editor ul li {
+    color: #dc3545 !important;
+}
+
+/* WYSIWYG Work in Progress [>] - ORANGE */
+.wysiwyg-editor ul li.status-progress {
+    color: #fd7e14 !important;
+}
+
+/* WYSIWYG Completed [x] - GREEN */
+.wysiwyg-editor ul li.status-completed {
+    color: #28a745 !important;
+}
+
+.wysiwyg-editor ul li:before {
+    content: "•";
+    font-weight: bold;
+    position: absolute;
+    left: -15px;
+    color: inherit;
 }
 
 .preview-content ul li input[type="checkbox"] {

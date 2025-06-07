@@ -2,7 +2,7 @@
 
 --------------------------------------------------------------------------------
 
-## [ ] Task 1: Set up the project
+## [x] Task 1: Set up the project
 
 ### Description
 This is the first task of the project. It includes initial setup and basic structure.
@@ -19,7 +19,7 @@ This is the first task of the project. It includes initial setup and basic struc
 
 --------------------------------------------------------------------------------
 
-## [ ] Task 2: Implement main functionality
+## [>] Task 2: Implement main functionality
 
 ### Description
 Develop the main features of the application.

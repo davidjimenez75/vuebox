@@ -23,6 +23,18 @@ createApp({
             return marked.parse(this.markdownContent || '');
         }
     },
+    
+    watch: {
+        compiledMarkdown() {
+            // Apply checkbox styling when compiled markdown changes
+            this.$nextTick(() => {
+                const previewDiv = document.querySelector('.preview-content');
+                if (previewDiv) {
+                    this.applyCheckboxStyling(previewDiv);
+                }
+            });
+        }
+    },
     methods: {
         async loadFile() {
             try {
@@ -89,9 +101,11 @@ createApp({
                 if (wysiwygDiv) {
                     // Ensure proper CSS classes are applied
                     wysiwygDiv.innerHTML = this.wysiwygContent;
+                    // Apply checkbox status styling
+                    this.applyCheckboxStyling(wysiwygDiv);
                 }
             });
-        },        convertWysiwygToMarkdown() {
+        },convertWysiwygToMarkdown() {
             // Convert HTML from WYSIWYG editor to Markdown
             const wysiwygDiv = document.querySelector('.wysiwyg-editor');
             if (wysiwygDiv) {
@@ -111,15 +125,22 @@ createApp({
         },        htmlToMarkdown(html, originalMarkdown = '') {
             // Enhanced HTML to Markdown conversion that preserves line breaks and checkboxes
             let markdown = html;
-            
-            // Extract checkbox items from original markdown for reference
+              // Extract checkbox items from original markdown for reference
             const checkboxItems = [];
             if (originalMarkdown) {
-                const checkboxMatches = originalMarkdown.match(/- \[ \] .+/g);
+                // Match all checkbox types: [ ], [x], [>]
+                const checkboxMatches = originalMarkdown.match(/- \[[x>\s]\] .+/g);
                 if (checkboxMatches) {
                     checkboxMatches.forEach(item => {
-                        const text = item.replace(/^- \[ \] /, '').trim();
-                        checkboxItems.push(text);
+                        const match = item.match(/^- \[([x>\s])\] (.+)$/);
+                        if (match) {
+                            const status = match[1];
+                            const text = match[2].trim();
+                            checkboxItems.push({
+                                text: text,
+                                status: status === ' ' ? '[ ]' : `[${status}]`
+                            });
+                        }
                     });
                 }
             }
@@ -137,11 +158,10 @@ createApp({
                         let text = li.replace(/<li[^>]*>(.*?)<\/li>/gis, '$1')
                                     .replace(/<[^>]*>/g, '')
                                     .replace(/\s+/g, ' ')
-                                    .trim();
-                          // Check if this text was originally a checkbox item
-                        const wasCheckbox = checkboxItems.some(checkboxText => {
+                                    .trim();                        // Check if this text was originally a checkbox item
+                        const wasCheckbox = checkboxItems.find(checkboxItem => {
                             const textLower = text.toLowerCase();
-                            const checkboxLower = checkboxText.toLowerCase();
+                            const checkboxLower = checkboxItem.text.toLowerCase();
                             return textLower.includes(checkboxLower) ||
                                    checkboxLower.includes(textLower) ||
                                    textLower === checkboxLower;
@@ -152,7 +172,14 @@ createApp({
                                             content.toLowerCase().includes('subtask') ||
                                             match.toLowerCase().includes('subtask');
                         
-                        if (wasCheckbox || looksLikeTask) {
+                        // Check if text already contains checkbox notation
+                        const alreadyHasCheckbox = /^\[[x>\s]\]/.test(text);
+                        
+                        if (alreadyHasCheckbox) {
+                            return `- ${text}`;
+                        } else if (wasCheckbox) {
+                            return `- ${wasCheckbox.status} ${text}`;
+                        } else if (looksLikeTask) {
                             return `- [ ] ${text}`;
                         } else {
                             return `- ${text}`;
@@ -269,10 +296,62 @@ createApp({
             // Update preview with latest content
             this.updateFromMarkdown();
         },
-        
-        updateFromMarkdown() {
+          updateFromMarkdown() {
             // Update preview with latest markdown content
             this.previewContent = marked.parse(this.markdownContent || '');
+            
+            // Apply checkbox styling to preview
+            this.$nextTick(() => {
+                const previewDiv = document.querySelector('.preview-content');
+                if (previewDiv) {
+                    this.applyCheckboxStyling(previewDiv);
+                }
+            });
+        },        applyCheckboxStyling(container) {
+            // Apply styling based on checkbox states in text content
+            // Color scheme: [ ] = Red (TO-DO), [x] = Green (Completed), [>] = Orange (Work in Progress)
+            
+            // Handle task titles (h2 elements)
+            const h2Elements = container.querySelectorAll('h2');
+            h2Elements.forEach(h2 => {
+                const text = h2.textContent;
+                h2.className = ''; // Reset classes
+                
+                if (text.includes('[x]')) {
+                    h2.classList.add('status-completed');
+                    h2.style.color = '#28a745';
+                    h2.style.borderBottomColor = '#28a745';
+                } else if (text.includes('[>]')) {
+                    h2.classList.add('status-progress');
+                    h2.style.color = '#fd7e14';
+                    h2.style.borderBottomColor = '#fd7e14';
+                } else {
+                    h2.classList.add('status-todo');
+                    h2.style.color = '#dc3545';
+                    h2.style.borderBottomColor = '#dc3545';
+                }
+            });
+            
+            // Handle subtask list items (li elements)
+            const liElements = container.querySelectorAll('ul li');
+            liElements.forEach(li => {
+                const text = li.textContent;
+                li.className = ''; // Reset classes
+                
+                if (text.includes('[x]')) {
+                    li.classList.add('status-completed');
+                    li.style.color = '#28a745';
+                } else if (text.includes('[>]')) {
+                    li.classList.add('status-progress');
+                    li.style.color = '#fd7e14';
+                } else if (text.includes('[ ]')) {
+                    li.classList.add('status-todo');
+                    li.style.color = '#dc3545';
+                } else {
+                    // Regular list item (Comments section)
+                    li.style.color = '#343a40';
+                }
+            });
         },
         
         addTask() {
@@ -354,13 +433,12 @@ createApp({
                     alertDiv.parentNode.removeChild(alertDiv);
                 }
             }, 3000);
-        },
-          getDefaultContent() {
+        },        getDefaultContent() {
             return `# Task List
 
 ${'-'.repeat(80)}
 
-## Task 1: Set up the project
+## [x] Task 1: Set up the project
 
 ### Description
 This is the first task of the project. It includes initial setup and basic structure.
@@ -371,13 +449,13 @@ This is the first task of the project. It includes initial setup and basic struc
 - Test that everything works
 
 ### Subtasks
-- [ ] Create folder structure
-- [ ] Configure base files
-- [ ] Test basic functionality
+- [x] Create folder structure
+- [x] Configure base files
+- [>] Test basic functionality
 
 ${'-'.repeat(80)}
 
-## Task 2: Implement main functionality
+## [>] Task 2: Implement main functionality
 
 ### Description
 Develop the main features of the application.
@@ -387,14 +465,14 @@ This task is more complex and will require more time.
 I should break it down into smaller parts for better management.
 
 ### Subtasks
-- [ ] Design user interface
-- [ ] Implement business logic
-- [ ] Add validations
-- [ ] Perform testing
+- [x] Design user interface
+- [x] Implement business logic
+- [x] Add validations
+- [>] Perform testing
 
 ${'-'.repeat(80)}
 
-## Task 3: Documentation and deployment
+## [ ] Task 3: Documentation and deployment
 
 ### Description
 Finalize documentation and prepare for deployment.
