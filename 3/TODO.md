@@ -1,50 +1,50 @@
-# Lista de Tareas
+# Task List
 
 --------------------------------------------------------------------------------
 
-## Tarea 1: Configurar el proyecto
+## Task 1: Set up the project
 
-### Descripción
-Esta es la primera tarea del proyecto. Incluye la configuración inicial y la estructura básica.
+### Description
+This is the first task of the project. It includes initial setup and basic structure.
 
-### Comentarios
-- Necesito revisar todos los archivos de configuración
-- Asegurarme de que las dependencias estén correctas
-- Probar que todo funcione
+### Comments
+- I need to review all configuration files
+- Make sure dependencies are correct
+- Test that everything works
 
-### Subtareas
-- [ ] Crear estructura de carpetas
-- [ ] Configurar archivos base
-- [ ] Probar funcionalidad básica
-
---------------------------------------------------------------------------------
-
-## Tarea 2: Implementar funcionalidad principal
-
-### Descripción
-Desarrollar las características principales de la aplicación.
-
-### Comentarios
-Esta tarea es más compleja y requerirá más tiempo.
-Debo dividirla en partes más pequeñas para mejor gestión.
-
-### Subtareas
-- [ ] Diseñar interfaz de usuario
-- [ ] Implementar lógica de negocio
-- [ ] Añadir validaciones
-- [ ] Realizar pruebas
+### Subtasks
+- [ ] Create folder structure
+- [ ] Configure base files
+- [ ] Test basic functionality
 
 --------------------------------------------------------------------------------
 
-## Tarea 3: Documentación y despliegue
+## Task 2: Implement main functionality
 
-### Descripción
-Finalizar la documentación y preparar para despliegue.
+### Description
+Develop the main features of the application.
 
-### Comentarios
-No olvidar incluir ejemplos y guías de uso.
+### Comments
+This task is more complex and will require more time.
+I should break it down into smaller parts for better management.
 
-### Subtareas
-- [ ] Escribir documentación
-- [ ] Crear ejemplos
-- [ ] Preparar para producción
+### Subtasks
+- [ ] Design user interface
+- [ ] Implement business logic
+- [ ] Add validations
+- [ ] Perform testing
+
+--------------------------------------------------------------------------------
+
+## Task 3: Documentation and deployment
+
+### Description
+Finalize documentation and prepare for deployment.
+
+### Comments
+Don't forget to include examples and usage guides.
+
+### Subtasks
+- [ ] Write documentation
+- [ ] Create examples
+- [ ] Prepare for production

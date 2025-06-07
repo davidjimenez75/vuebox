@@ -1,104 +1,129 @@
-# Proyecto 3: Editor WYSIWYG para TODO.md
+# Project 3: WYSIWYG Editor for TODO.md
 
-Este proyecto es un editor avanzado de tareas TODO con funcionalidad WYSIWYG (What You See Is What You Get) para archivos Markdown.
+This project is an advanced TODO task editor with WYSIWYG (What You See Is What You Get) functionality for Markdown files.
 
-## Características
+## Features
 
-* Editor WYSIWYG visual para editar tareas de forma intuitiva
-* Modo de edición de código Markdown tradicional
-* Vista previa en tiempo real del contenido
-* Soporte para tareas con comentarios multi-línea y subtareas
-* Separadores automáticos entre tareas (80 guiones por defecto)
-* Guardado y carga de archivos TODO.md
-* Interfaz responsive y moderna con Bootstrap
-* Funcionalidad de agregar tareas mediante formulario modal
+* Visual WYSIWYG editor for intuitive task editing
+* Traditional Markdown code editing mode
+* Real-time content preview
+* Support for tasks with multi-line comments and subtasks
+* Automatic separators between tasks (80 dashes by default)
+* Save and load TODO.md files
+* Responsive and modern interface with Bootstrap
+* Add tasks functionality through modal form
 
-## Tecnologías Utilizadas
+## Technologies Used
 
 * HTML5
-* CSS3 con Bootstrap 5
+* CSS3 with Bootstrap 5
 * JavaScript ES6+
 * Vue.js 3 (via CDN)
-* Marked.js (para parsing de Markdown)
-* Font Awesome (iconos)
-* CodeMirror (editor de código)
+* Marked.js (for Markdown parsing)
+* Font Awesome (icons)
+* CodeMirror (code editor)
 
-## Estructura de Archivos
+## File Structure
 
 ```
 3/
-├── index.html          # Página principal de la aplicación
-├── index.js           # Lógica de la aplicación Vue.js
-├── style.css          # Estilos personalizados
-├── TODO.md           # Archivo de tareas por defecto
-├── README.md         # Este archivo (documentación en inglés)
-└── README.es.md      # Documentación en español
+├── index.html          # Main application page
+├── index.js           # Vue.js application logic
+├── style.css          # Custom styles
+├── TODO.md           # Default task file
+├── README.md         # This file (English documentation)
+└── README.es.md      # Spanish documentation
 ```
 
-## Cómo Utilizar
+## How to Use
 
-1. Abrir `index.html` en un navegador web moderno
-2. La aplicación cargará automáticamente el archivo `TODO.md`
-3. Usar el modo WYSIWYG para edición visual o cambiar al modo código
-4. Agregar nuevas tareas con el botón "Nueva Tarea"
-5. Guardar los cambios usando el botón "Guardar"
+1. Open `index.html` in a modern web browser
+2. The application will automatically load the `TODO.md` file
+3. Use WYSIWYG mode for visual editing or switch to code mode
+4. Add new tasks with the "New Task" button
+5. Save changes using the "Save" button
 
-## Funcionalidades del Editor
+## Editor Features
 
-### Modo WYSIWYG
-- Edición visual directa del contenido
-- Barra de herramientas con opciones de formato
-- Botón para agregar nuevas tareas estructuradas
-- Inserción automática de separadores
+### WYSIWYG Mode
+- Direct visual content editing
+- Toolbar with formatting options
+- Button to add new structured tasks
+- Automatic separator insertion
 
-### Modo Código
-- Editor de texto plano para Markdown
-- Resaltado de sintaxis
-- Edición directa del código fuente
+### Code Mode
+- Plain text editor for Markdown
+- Syntax highlighting
+- Direct source code editing
 
-### Vista Previa
-- Renderizado en tiempo real del Markdown
-- Estilos personalizados para mejor legibilidad
-- Soporte completo para checkboxes de tareas
+### Preview
+- Real-time Markdown rendering
+- Custom styles for better readability
+- Full support for task checkboxes
 
-## Formato de Tareas
+## Task Format
 
-Cada tarea sigue esta estructura:
+Each task follows this structure:
 
 ```markdown
 --------------------------------------------------------------------------------
 
-## Título de la Tarea
+## Task Title
 
-### Descripción
-Descripción detallada de la tarea.
+### Description
+Detailed description of the task.
 
-### Comentarios
-Comentarios adicionales que pueden ser
-de múltiples líneas.
+### Comments
+Additional comments that can be
+multi-line.
 
-### Subtareas
-- [ ] Primera subtarea
-- [ ] Segunda subtarea
-- [ ] Tercera subtarea
+### Subtasks
+- [ ] First subtask
+- [ ] Second subtask
+- [ ] Third subtask
 ```
 
-## Requisitos del Sistema
+## System Requirements
 
-- Navegador web moderno con soporte para ES6+
-- Conexión a internet para cargar las librerías CDN
-- JavaScript habilitado
+- Modern web browser with ES6+ support
+- Internet connection to load CDN libraries
+- JavaScript enabled
 
-## Personalización
+## Customization
 
-El archivo `style.css` contiene todos los estilos personalizables:
-- Colores del tema
-- Tamaños de fuente
-- Espaciado y diseño
-- Efectos de animación
+The `style.css` file contains all customizable styles:
+- Theme colors
+- Font sizes
+- Spacing and layout
+- Animation effects
 
-## Limitaciones Conocidas
+## Known Limitations
 
-- La funcionalidad de guardado descarga el archivo localmente
-- Requiere conexión a internet para las librerías CDN
-- La conversión HTML a Markdown es básica y puede requerir ajustes manuales
+- Save functionality downloads the file locally
+- Requires internet connection for CDN libraries
+- HTML to Markdown conversion is basic and may require manual adjustments
+
+## Enhanced Features
+
+- **Full browser window height**: Editors adapt to full window size
+- **Proper subtask rendering**: Subtasks display as separate lines with correct formatting
+- **Color-coded tasks**: Task titles in BLUE, subtasks in RED for better visual distinction
+- **Responsive design**: Works on desktop and mobile devices
+- **Real-time synchronization**: Changes sync between WYSIWYG and code modes
+
+## Installation and Usage
+
+No additional installation required. Simply:
+
+1. Download all files to a folder
+2. Open `index.html` in your preferred browser
+3. Start editing your tasks!
+
+## Contributing
+
+This project is part of a Vue.js examples collection. To contribute:
+
+1. Review existing code
+2. Maintain consistent documentation style
+3. Test across multiple browsers
+4. Update documentation as needed

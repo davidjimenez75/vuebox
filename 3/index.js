@@ -13,9 +13,13 @@ createApp({
                 subtasks: ''
             }
         }
-    },
-    computed: {
+    },    computed: {
         compiledMarkdown() {
+            // Configure marked for better list rendering
+            marked.setOptions({
+                breaks: true,
+                gfm: true
+            });
             return marked.parse(this.markdownContent || '');
         }
     },
@@ -25,14 +29,13 @@ createApp({
                 const response = await fetch('TODO.md');
                 if (response.ok) {
                     this.markdownContent = await response.text();
-                    this.convertMarkdownToWysiwyg();
-                } else {
-                    console.warn('No se pudo cargar TODO.md, usando contenido por defecto');
+                    this.convertMarkdownToWysiwyg();                } else {
+                    console.warn('Could not load TODO.md, using default content');
                     this.markdownContent = this.getDefaultContent();
                     this.convertMarkdownToWysiwyg();
                 }
             } catch (error) {
-                console.warn('Error al cargar archivo:', error);
+                console.warn('Error loading file:', error);
                 this.markdownContent = this.getDefaultContent();
                 this.convertMarkdownToWysiwyg();
             }
@@ -48,9 +51,8 @@ createApp({
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
-            // Mostrar mensaje de éxito
-            this.showAlert('Archivo guardado exitosamente', 'success');
+              // Show success message
+            this.showAlert('File saved successfully', 'success');
         },
         
         toggleView() {
@@ -125,17 +127,16 @@ createApp({
         insertTask() {
             let taskMarkdown = '\n' + '-'.repeat(80) + '\n\n';
             taskMarkdown += `## ${this.newTask.title}\n\n`;
-            
-            if (this.newTask.description) {
-                taskMarkdown += `### Descripción\n${this.newTask.description}\n\n`;
+              if (this.newTask.description) {
+                taskMarkdown += `### Description\n${this.newTask.description}\n\n`;
             }
             
             if (this.newTask.comments) {
-                taskMarkdown += `### Comentarios\n${this.newTask.comments}\n\n`;
+                taskMarkdown += `### Comments\n${this.newTask.comments}\n\n`;
             }
             
             if (this.newTask.subtasks) {
-                taskMarkdown += `### Subtareas\n`;
+                taskMarkdown += `### Subtasks\n`;
                 const subtasks = this.newTask.subtasks.split('\n').filter(task => task.trim());
                 subtasks.forEach(task => {
                     taskMarkdown += `- [ ] ${task.trim()}\n`;
@@ -151,7 +152,7 @@ createApp({
             const modal = bootstrap.Modal.getInstance(document.getElementById('taskModal'));
             modal.hide();
             
-            this.showAlert('Tarea agregada exitosamente', 'success');
+            this.showAlert('Task added successfully', 'success');
         },
         
         addSeparator() {
@@ -189,58 +190,57 @@ createApp({
                 }
             }, 3000);
         },
-        
-        getDefaultContent() {
-            return `# Lista de Tareas
+          getDefaultContent() {
+            return `# Task List
 
 ${'-'.repeat(80)}
 
-## Tarea 1: Configurar el proyecto
+## Task 1: Set up the project
 
-### Descripción
-Esta es la primera tarea del proyecto. Incluye la configuración inicial y la estructura básica.
+### Description
+This is the first task of the project. It includes initial setup and basic structure.
 
-### Comentarios
-- Necesito revisar todos los archivos de configuración
-- Asegurarme de que las dependencias estén correctas
-- Probar que todo funcione
+### Comments
+- I need to review all configuration files
+- Make sure dependencies are correct
+- Test that everything works
 
-### Subtareas
-- [ ] Crear estructura de carpetas
-- [ ] Configurar archivos base
-- [ ] Probar funcionalidad básica
-
-${'-'.repeat(80)}
-
-## Tarea 2: Implementar funcionalidad principal
-
-### Descripción
-Desarrollar las características principales de la aplicación.
-
-### Comentarios
-Esta tarea es más compleja y requerirá más tiempo.
-Debo dividirla en partes más pequeñas para mejor gestión.
-
-### Subtareas
-- [ ] Diseñar interfaz de usuario
-- [ ] Implementar lógica de negocio
-- [ ] Añadir validaciones
-- [ ] Realizar pruebas
+### Subtasks
+- [ ] Create folder structure
+- [ ] Configure base files
+- [ ] Test basic functionality
 
 ${'-'.repeat(80)}
 
-## Tarea 3: Documentación y despliegue
+## Task 2: Implement main functionality
 
-### Descripción
-Finalizar la documentación y preparar para despliegue.
+### Description
+Develop the main features of the application.
 
-### Comentarios
-No olvidar incluir ejemplos y guías de uso.
+### Comments
+This task is more complex and will require more time.
+I should break it down into smaller parts for better management.
 
-### Subtareas
-- [ ] Escribir documentación
-- [ ] Crear ejemplos
-- [ ] Preparar para producción`;
+### Subtasks
+- [ ] Design user interface
+- [ ] Implement business logic
+- [ ] Add validations
+- [ ] Perform testing
+
+${'-'.repeat(80)}
+
+## Task 3: Documentation and deployment
+
+### Description
+Finalize documentation and prepare for deployment.
+
+### Comments
+Don't forget to include examples and usage guides.
+
+### Subtasks
+- [ ] Write documentation
+- [ ] Create examples
+- [ ] Prepare for production`;
         }
     },
     

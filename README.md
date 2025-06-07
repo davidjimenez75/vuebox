@@ -78,15 +78,6 @@ echo "deb https://dl.yarnpkg.com/debian/ rc main" | sudo tee /etc/apt/sources.li
 sudo apt update && sudo apt install yarn
 yarn -v
 ```
-### Add color to folders?
-
-Copy one of the root folder index.*.txt files inside the subfolder.
-
- - index.danger.txt (red)
- - index.warning.txt (orange)
- - index.info.txt (light blue)
- - index.primary.txt (blue)
- - index.success.txt  (green)
 
 ### Add small description to folders?
 

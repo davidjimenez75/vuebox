@@ -156,14 +156,6 @@ Proporciona un punto de partida estandarizado para nuevos ejemplos:
 
 ### 3. Sistema de Organización
 
-#### Indicadores de Estado
-Los ejemplos pueden categorizarse usando archivos especiales:
-- `index.danger.txt` - Fondo rojo (avanzado/crítico)
-- `index.warning.txt` - Fondo naranja (intermedio)
-- `index.info.txt` - Fondo azul claro (informativo)
-- `index.primary.txt` - Fondo azul (ejemplos primarios)
-- `index.success.txt` - Fondo verde (básico/completado)
-
 #### Documentación
 - `index.txt` - Contiene descripción y notas para cada ejemplo
 - Soporta contenido HTML para formato enriquecido

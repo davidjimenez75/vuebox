@@ -1,10 +1,1 @@
-✅ Aplicación Vue.js completada
-✅ Editor WYSIWYG funcional
-✅ Modo código con CodeMirror
-✅ Vista previa en tiempo real
-✅ Sistema de tareas estructuradas
-✅ Separadores automáticos (80 guiones)
-✅ Guardado y carga de archivos
-✅ Interfaz responsive con Bootstrap
-✅ Documentación en español e inglés
-✅ Usando solo CDNs (sin npm install)
+TODO.md Editor in Vue.js ✅ 
