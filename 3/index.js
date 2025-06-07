@@ -91,42 +91,72 @@ createApp({
                     wysiwygDiv.innerHTML = this.wysiwygContent;
                 }
             });
-        },
-          convertWysiwygToMarkdown() {
+        },        convertWysiwygToMarkdown() {
             // Convert HTML from WYSIWYG editor to Markdown
             const wysiwygDiv = document.querySelector('.wysiwyg-editor');
             if (wysiwygDiv) {
                 // Get the innerHTML and normalize it
                 let htmlContent = wysiwygDiv.innerHTML;
                 
+                // Store a reference to detect checkboxes from original content
+                const originalMarkdown = this.markdownContent || '';
+                
                 // Convert to markdown
-                this.markdownContent = this.htmlToMarkdown(htmlContent);
+                this.markdownContent = this.htmlToMarkdown(htmlContent, originalMarkdown);
                 
                 // Debug output to console
                 console.log('Original HTML:', htmlContent);
                 console.log('Converted Markdown:', this.markdownContent);
             }
-        },htmlToMarkdown(html) {
-            // Enhanced HTML to Markdown conversion that preserves line breaks
+        },        htmlToMarkdown(html, originalMarkdown = '') {
+            // Enhanced HTML to Markdown conversion that preserves line breaks and checkboxes
             let markdown = html;
+            
+            // Extract checkbox items from original markdown for reference
+            const checkboxItems = [];
+            if (originalMarkdown) {
+                const checkboxMatches = originalMarkdown.match(/- \[ \] .+/g);
+                if (checkboxMatches) {
+                    checkboxMatches.forEach(item => {
+                        const text = item.replace(/^- \[ \] /, '').trim();
+                        checkboxItems.push(text);
+                    });
+                }
+            }
             
             // First, normalize different line break patterns browsers create
             // Handle div elements that browsers create for line breaks
             markdown = markdown.replace(/<div[^>]*><br[^>]*><\/div>/gi, '\n\n');
             markdown = markdown.replace(/<div[^>]*>\s*<\/div>/gi, '\n\n');
-            markdown = markdown.replace(/<div[^>]*>(.*?)<\/div>/gi, '$1\n\n');
-            
-            // Handle lists first (before removing other tags)
-            // Convert unordered lists
+            markdown = markdown.replace(/<div[^>]*>(.*?)<\/div>/gi, '$1\n\n');            // Handle lists first (before removing other tags)
+            // Convert unordered lists with checkbox detection
             markdown = markdown.replace(/<ul[^>]*>(.*?)<\/ul>/gis, (match, content) => {
                 const listItems = content.match(/<li[^>]*>(.*?)<\/li>/gis);
                 if (listItems) {
                     const items = listItems.map(li => {
-                        const text = li.replace(/<li[^>]*>(.*?)<\/li>/gis, '$1')
+                        let text = li.replace(/<li[^>]*>(.*?)<\/li>/gis, '$1')
                                     .replace(/<[^>]*>/g, '')
                                     .replace(/\s+/g, ' ')
                                     .trim();
-                        return `- ${text}`;
+                          // Check if this text was originally a checkbox item
+                        const wasCheckbox = checkboxItems.some(checkboxText => {
+                            const textLower = text.toLowerCase();
+                            const checkboxLower = checkboxText.toLowerCase();
+                            return textLower.includes(checkboxLower) ||
+                                   checkboxLower.includes(textLower) ||
+                                   textLower === checkboxLower;
+                        });
+                        
+                        // Also check context-based detection for common task patterns
+                        const looksLikeTask = /^(Create|Configure|Test|Design|Implement|Add|Perform|Write|Prepare|Review|Make sure|Don't forget)/i.test(text) ||
+                                            content.toLowerCase().includes('subtask') ||
+                                            match.toLowerCase().includes('subtask');
+                        
+                        if (wasCheckbox || looksLikeTask) {
+                            return `- [ ] ${text}`;
+                        } else {
+                            return `- ${text}`;
+                        }
                     }).join('\n');
                     return `\n${items}\n\n`;
                 }
@@ -192,8 +222,46 @@ createApp({
             
             // Trim and ensure proper ending
             markdown = markdown.trim();
+              return markdown;
+        },
+        
+        similarity(str1, str2) {
+            // Simple string similarity calculation using Levenshtein distance
+            const longer = str1.length > str2.length ? str1 : str2;
+            const shorter = str1.length > str2.length ? str2 : str1;
             
-            return markdown;
+            if (longer.length === 0) return 1.0;
+            
+            const distance = this.levenshteinDistance(longer, shorter);
+            return (longer.length - distance) / longer.length;
+        },
+        
+        levenshteinDistance(str1, str2) {
+            const matrix = [];
+            
+            for (let i = 0; i <= str2.length; i++) {
+                matrix[i] = [i];
+            }
+            
+            for (let j = 0; j <= str1.length; j++) {
+                matrix[0][j] = j;
+            }
+            
+            for (let i = 1; i <= str2.length; i++) {
+                for (let j = 1; j <= str1.length; j++) {
+                    if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
+                    } else {
+                        matrix[i][j] = Math.min(
+                            matrix[i - 1][j - 1] + 1,
+                            matrix[i][j - 1] + 1,
+                            matrix[i - 1][j] + 1
+                        );
+                    }
+                }
+            }
+            
+            return matrix[str2.length][str1.length];
         },
           updateFromWysiwyg() {
             // Convert WYSIWYG content to markdown and update preview

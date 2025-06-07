@@ -2,7 +2,7 @@
 
 --------------------------------------------------------------------------------
 
-## Task 1: Set up the project
+## [ ] Task 1: Set up the project
 
 ### Description
 This is the first task of the project. It includes initial setup and basic structure.
@@ -13,13 +13,13 @@ This is the first task of the project. It includes initial setup and basic struc
 - Test that everything works
 
 ### Subtasks
-- [ ] Create folder structure
-- [ ] Configure base files
-- [ ] Test basic functionality
+- [x] Create folder structure
+- [x] Configure base files
+- [>] Test basic functionality
 
 --------------------------------------------------------------------------------
 
-## Task 2: Implement main functionality
+## [ ] Task 2: Implement main functionality
 
 ### Description
 Develop the main features of the application.
@@ -29,14 +29,14 @@ This task is more complex and will require more time.
 I should break it down into smaller parts for better management.
 
 ### Subtasks
-- [ ] Design user interface
-- [ ] Implement business logic
-- [ ] Add validations
-- [ ] Perform testing
+- [x] Design user interface
+- [x] Implement business logic
+- [x] Add validations
+- [>] Perform testing
 
 --------------------------------------------------------------------------------
 
-## Task 3: Documentation and deployment
+## [ ] Task 3: Documentation and deployment
 
 ### Description
 Finalize documentation and prepare for deployment.
@@ -45,6 +45,6 @@ Finalize documentation and prepare for deployment.
 Don't forget to include examples and usage guides.
 
 ### Subtasks
-- [ ] Write documentation
-- [ ] Create examples
+- [x] Write documentation
+- [x] Create examples
 - [ ] Prepare for production
