@@ -51,35 +51,32 @@ body {
 .wysiwyg-editor h2 {
     color: #007bff !important;
     font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 15px;
     border-bottom: 2px solid #007bff;
     padding-bottom: 5px;
-    margin-top: 30px;
-    margin-bottom: 15px;
 }
 
 .wysiwyg-editor ul {
+    list-style: none;
     padding-left: 20px;
-    list-style-type: none;
-    margin-bottom: 15px;
+    margin: 15px 0;
 }
 
 .wysiwyg-editor ul li {
-    margin-bottom: 8px;
-    display: block;
+    color: #dc3545 !important;
     position: relative;
-    padding-left: 25px;
-    color: #dc3545;
+    margin: 8px 0;
+    display: block;
     font-weight: 500;
-    line-height: 1.5;
 }
 
-.wysiwyg-editor ul li::before {
+.wysiwyg-editor ul li:before {
     content: "•";
     color: #dc3545;
     font-weight: bold;
     position: absolute;
-    left: 0;
-    top: 0;
+    left: -15px;
 }
 
 /* Code Editor */

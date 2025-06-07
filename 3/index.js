@@ -54,60 +54,157 @@ createApp({
               // Show success message
             this.showAlert('File saved successfully', 'success');
         },
-        
-        toggleView() {
+          toggleView() {
             if (this.viewMode === 'wysiwyg') {
-                this.viewMode = 'markdown';
+                // Switching to code mode
                 this.convertWysiwygToMarkdown();
+                this.viewMode = 'markdown';
             } else {
+                // Switching to WYSIWYG mode
                 this.viewMode = 'wysiwyg';
                 this.convertMarkdownToWysiwyg();
             }
+            
+            // Force Vue to re-render the components
+            this.$forceUpdate();
+        },        convertMarkdownToWysiwyg() {
+            // Convert markdown to HTML for WYSIWYG editor
+            if (this.markdownContent) {
+                // Configure marked options for better parsing
+                marked.setOptions({
+                    breaks: true,
+                    gfm: true,
+                    headerIds: false,
+                    mangle: false
+                });
+                
+                this.wysiwygContent = marked.parse(this.markdownContent);
+            } else {
+                this.wysiwygContent = '';
+            }
+            
+            // Use nextTick to ensure DOM is updated before applying styles
+            this.$nextTick(() => {
+                const wysiwygDiv = document.querySelector('.wysiwyg-editor');
+                if (wysiwygDiv) {
+                    // Ensure proper CSS classes are applied
+                    wysiwygDiv.innerHTML = this.wysiwygContent;
+                }
+            });
         },
-        
-        convertMarkdownToWysiwyg() {
-            // Convertir markdown a HTML para el editor WYSIWYG
-            this.wysiwygContent = marked.parse(this.markdownContent || '');
-        },
-        
-        convertWysiwygToMarkdown() {
-            // Convertir HTML del editor WYSIWYG a Markdown
+          convertWysiwygToMarkdown() {
+            // Convert HTML from WYSIWYG editor to Markdown
             const wysiwygDiv = document.querySelector('.wysiwyg-editor');
             if (wysiwygDiv) {
-                this.markdownContent = this.htmlToMarkdown(wysiwygDiv.innerHTML);
+                // Get the innerHTML and normalize it
+                let htmlContent = wysiwygDiv.innerHTML;
+                
+                // Convert to markdown
+                this.markdownContent = this.htmlToMarkdown(htmlContent);
+                
+                // Debug output to console
+                console.log('Original HTML:', htmlContent);
+                console.log('Converted Markdown:', this.markdownContent);
             }
-        },
-        
-        htmlToMarkdown(html) {
-            // Conversión básica de HTML a Markdown
+        },htmlToMarkdown(html) {
+            // Enhanced HTML to Markdown conversion that preserves line breaks
             let markdown = html;
             
-            // Reemplazar elementos HTML comunes
-            markdown = markdown.replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n');
-            markdown = markdown.replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n');
-            markdown = markdown.replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n');
-            markdown = markdown.replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**');
-            markdown = markdown.replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*');
-            markdown = markdown.replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n');
-            markdown = markdown.replace(/<br\s*\/?>/gi, '\n');
-            markdown = markdown.replace(/<hr\s*\/?>/gi, '\n' + '-'.repeat(80) + '\n');
+            // First, normalize different line break patterns browsers create
+            // Handle div elements that browsers create for line breaks
+            markdown = markdown.replace(/<div[^>]*><br[^>]*><\/div>/gi, '\n\n');
+            markdown = markdown.replace(/<div[^>]*>\s*<\/div>/gi, '\n\n');
+            markdown = markdown.replace(/<div[^>]*>(.*?)<\/div>/gi, '$1\n\n');
             
-            // Limpiar HTML restante
+            // Handle lists first (before removing other tags)
+            // Convert unordered lists
+            markdown = markdown.replace(/<ul[^>]*>(.*?)<\/ul>/gis, (match, content) => {
+                const listItems = content.match(/<li[^>]*>(.*?)<\/li>/gis);
+                if (listItems) {
+                    const items = listItems.map(li => {
+                        const text = li.replace(/<li[^>]*>(.*?)<\/li>/gis, '$1')
+                                    .replace(/<[^>]*>/g, '')
+                                    .replace(/\s+/g, ' ')
+                                    .trim();
+                        return `- ${text}`;
+                    }).join('\n');
+                    return `\n${items}\n\n`;
+                }
+                return '';
+            });
+            
+            // Convert ordered lists
+            markdown = markdown.replace(/<ol[^>]*>(.*?)<\/ol>/gis, (match, content) => {
+                const listItems = content.match(/<li[^>]*>(.*?)<\/li>/gis);
+                if (listItems) {
+                    const items = listItems.map((li, index) => {
+                        const text = li.replace(/<li[^>]*>(.*?)<\/li>/gis, '$1')
+                                    .replace(/<[^>]*>/g, '')
+                                    .replace(/\s+/g, ' ')
+                                    .trim();
+                        return `${index + 1}. ${text}`;
+                    }).join('\n');
+                    return `\n${items}\n\n`;
+                }
+                return '';
+            });
+            
+            // Handle headings with proper spacing
+            markdown = markdown.replace(/<h1[^>]*>(.*?)<\/h1>/gi, '\n# $1\n\n');
+            markdown = markdown.replace(/<h2[^>]*>(.*?)<\/h2>/gi, '\n## $1\n\n');
+            markdown = markdown.replace(/<h3[^>]*>(.*?)<\/h3>/gi, '\n### $1\n\n');
+            markdown = markdown.replace(/<h4[^>]*>(.*?)<\/h4>/gi, '\n#### $1\n\n');
+            markdown = markdown.replace(/<h5[^>]*>(.*?)<\/h5>/gi, '\n##### $1\n\n');
+            markdown = markdown.replace(/<h6[^>]*>(.*?)<\/h6>/gi, '\n###### $1\n\n');
+            
+            // Handle text formatting
+            markdown = markdown.replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**');
+            markdown = markdown.replace(/<b[^>]*>(.*?)<\/b>/gi, '**$1**');
+            markdown = markdown.replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*');
+            markdown = markdown.replace(/<i[^>]*>(.*?)<\/i>/gi, '*$1*');
+            
+            // Handle paragraphs with proper spacing
+            markdown = markdown.replace(/<p[^>]*>(.*?)<\/p>/gis, '$1\n\n');
+            
+            // Handle line breaks
+            markdown = markdown.replace(/<br\s*\/?>/gi, '\n');
+            
+            // Handle horizontal rules (separators)
+            markdown = markdown.replace(/<hr[^>]*>/gi, '\n' + '-'.repeat(80) + '\n\n');
+            
+            // Clean up remaining HTML tags
             markdown = markdown.replace(/<[^>]*>/g, '');
+            
+            // Decode HTML entities
             markdown = markdown.replace(/&nbsp;/g, ' ');
             markdown = markdown.replace(/&amp;/g, '&');
             markdown = markdown.replace(/&lt;/g, '<');
             markdown = markdown.replace(/&gt;/g, '>');
+            markdown = markdown.replace(/&quot;/g, '"');
+            markdown = markdown.replace(/&#39;/g, "'");
+            markdown = markdown.replace(/&apos;/g, "'");
             
-            return markdown.trim();
+            // Normalize whitespace and line breaks
+            markdown = markdown.replace(/[ \t]+/g, ' '); // Multiple spaces/tabs to single space
+            markdown = markdown.replace(/\n[ \t]+/g, '\n'); // Remove leading spaces on lines
+            markdown = markdown.replace(/[ \t]+\n/g, '\n'); // Remove trailing spaces on lines
+            markdown = markdown.replace(/\n{3,}/g, '\n\n'); // Max 2 consecutive newlines
+            
+            // Trim and ensure proper ending
+            markdown = markdown.trim();
+            
+            return markdown;
         },
-        
-        updateFromWysiwyg() {
+          updateFromWysiwyg() {
+            // Convert WYSIWYG content to markdown and update preview
             this.convertWysiwygToMarkdown();
+            // Update preview with latest content
+            this.updateFromMarkdown();
         },
         
         updateFromMarkdown() {
-            this.convertMarkdownToWysiwyg();
+            // Update preview with latest markdown content
+            this.previewContent = marked.parse(this.markdownContent || '');
         },
         
         addTask() {
