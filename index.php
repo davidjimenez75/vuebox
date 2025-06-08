@@ -1,3 +1,64 @@
+<?php
+/**
+ * VueBox - A simple Vue.js application to display directories and their contents
+ * 
+ * This file serves as the main entry point for the VueBox application.
+ * It dynamically generates a navigation menu from a Markdown file and displays
+ * directories with their titles, descriptions, and tags.
+ */
+
+// Create the main menu from the index-menu.md file
+function parseMenuFromMarkdown($filePath) {
+    if (!file_exists($filePath)) {
+        return '';
+    }
+    
+    $content = file_get_contents($filePath);
+    $lines = explode("\n", $content);
+    $menuHtml = '';
+    $currentDropdown = null;
+    
+    foreach ($lines as $line) {
+        $line = trim($line);
+        
+        // Skip empty lines and comments
+        if (empty($line) || strpos($line, '<!--') === 0) {
+            continue;
+        }
+        
+        // Handle dropdown headers (# Header)
+        if (preg_match('/^# (.+)$/', $line, $matches)) {
+            // Close previous dropdown if exists
+            if ($currentDropdown !== null) {
+                $menuHtml .= "                            </ul>\n";
+                $menuHtml .= "                        </li>\n";
+            }
+            
+            $dropdownTitle = trim($matches[1]);
+            $menuHtml .= "                        <li class=\"nav-item dropdown\">\n";
+            $menuHtml .= "                            <a class=\"nav-link dropdown-toggle\" href=\"#\" role=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">{$dropdownTitle}</a>\n";
+            $menuHtml .= "                            <ul class=\"dropdown-menu\">\n";
+            $currentDropdown = $dropdownTitle;
+        }
+        
+        // Handle menu items (- [Title](URL))
+        if (preg_match('/^- \[(.+?)\]\((.+?)\)$/', $line, $matches)) {
+            $linkTitle = trim($matches[1]);
+            $linkUrl = trim($matches[2]);
+            $target = (strpos($linkUrl, 'http') === 0) ? ' target="_blank"' : '';
+            $menuHtml .= "                                <li><a class=\"dropdown-item\" href=\"{$linkUrl}\"{$target}>{$linkTitle}</a></li>\n";
+        }
+    }
+    
+    // Close last dropdown if exists
+    if ($currentDropdown !== null) {
+        $menuHtml .= "                            </ul>\n";
+        $menuHtml .= "                        </li>\n";
+    }
+    
+    return $menuHtml;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -140,36 +201,9 @@
 
                 <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                     
-                <!-- BEGIN - Navigation links and dropdowns imported from index-menu.md -->
+                    <!-- BEGIN - Navigation links and dropdowns imported from index-menu.md -->
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Vue 3</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="https://vuejs.org/guide/" target="_blank">Vue.js 3</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Vuex</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="https://vuex.vuejs.org/" target="_blank">Vuex</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Bootstrap 5</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank">Bootstrap 5</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Examples
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="https://vuejs.org/examples/" target="_blank">Vue.js 3</a></li>
-                                <li><a class="dropdown-item" href="https://vuex.vuejs.org/guide/" target="_blank">Vuex</a></li>
-                                <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.3/examples/" target="_blank">Bootstrap 5</a></li>
-                            </ul>
-                        </li>
+                    <?php echo parseMenuFromMarkdown('./index-menu.md'); ?>
                     </ul>
                     <!-- END - Navigation links and dropdowns imported from index-menu.md -->
 
