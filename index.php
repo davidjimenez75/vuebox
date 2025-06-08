@@ -339,11 +339,6 @@ function parseMenuFromMarkdown($filePath) {
         <div class="container">
             <div class="starter-template">
                 <div class="table-responsive">                    <table class="table align-middle custom-table">
-                        <thead class="table-dark">
-                            <tr>
-                                <th scope="col" style="width: 100%">Folder Name & Description</th>
-                            </tr>
-                        </thead>
                         <tbody id="list">
                             <template v-for="(value, index) in dirs" :key="index">
                                 <tr :class="value.visible + ' project-row'" 

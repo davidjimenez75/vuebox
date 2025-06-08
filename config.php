@@ -269,7 +269,7 @@ $default_color = [
 $viewed_files = [
     'README.md',
     'README.es.md',
-    'index.txt',
+    'LEEME.md',    
     'TODO.md',
     'CHANGELOG.md',
     'package.json',
