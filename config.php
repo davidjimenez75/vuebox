@@ -264,4 +264,17 @@ $default_color = [
 
 
 
+// Files that should be displayed when expanding project rows
+// Add any file extensions or specific filenames you want to show
+$viewed_files = [
+    'README.md',
+    'README.es.md',
+    'index.txt',
+    'TODO.md',
+    'CHANGELOG.md',
+    'package.json',
+    'bower.json',
+    'composer.json'
+];
+
 ?>

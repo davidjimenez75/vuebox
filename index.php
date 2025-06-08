@@ -128,6 +128,118 @@ function parseMenuFromMarkdown($filePath) {
         }        /* Project row styling */
         .project-row {
             transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .project-row.expanded {
+            border-bottom: 2px solid #007bff;
+        }
+
+        /* Expanded content styles */
+        .expanded-content {
+            background-color: #f8f9fa;
+        }
+
+        .tabs-container {
+            margin: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background: white;
+        }
+
+        .tabs-nav {
+            display: flex;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 0;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 10px 15px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .tab-button:hover {
+            background-color: #e9ecef;
+        }
+
+        .tab-button.active {
+            background-color: white;
+            border-bottom-color: #007bff;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .tabs-content {
+            min-height: 200px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .tab-pane {
+            padding: 15px;
+        }
+
+        .file-content {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+        }
+
+        .error {
+            color: #dc3545;
+            text-align: center;
+            padding: 20px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            margin: 10px;
+        }
+
+        .no-files {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+        }
+
+        /* Responsive design for tabs */
+        @media (max-width: 768px) {
+            .tabs-nav {
+                flex-direction: column;
+            }
+            
+            .tab-button {
+                border-bottom: 1px solid #dee2e6;
+                border-right: none;
+            }
+            
+            .tab-button.active {
+                border-bottom-color: #dee2e6;
+                border-left: 3px solid #007bff;
+            }
         }        /* Override Bootstrap 5 CSS variables for table backgrounds */
         .custom-table {
             --bs-table-bg: transparent;
@@ -233,24 +345,60 @@ function parseMenuFromMarkdown($filePath) {
                             </tr>
                         </thead>
                         <tbody id="list">
-                            <tr v-for="(value, index) in dirs" :key="index" :class="value.visible + ' project-row'" :style="getRowStyle(value)">
-                                <td class="text-start p-3">
-                                    <div class="project-title">
-                                        <span class="text-muted me-2">[{{ value.dir }}]</span>
-                                        <a :href="value.dir" class="text-decoration-none" v-html="highlightText(value.title)" :style="getTitleStyle(value)"></a>
-                                    </div>
-                                    <div v-if="value.description" class="project-description" v-html="formatDescription(value.description)"></div>
-                                    <div v-if="value.tags && value.tags.length > 0" class="mt-2">
-                                        <span v-for="tag in value.tags" :key="tag" 
-                                              class="project-tag" 
-                                              :style="getTagStyle(value, tag)"
-                                              :title="getTagTooltip(tag)"
-                                              @click="searchTag(tag)"
-                                              v-html="highlightText(tag)">
-                                        </span>
-                                    </div>
-                                </td>
-                            </tr>
+                            <template v-for="(value, index) in dirs" :key="index">
+                                <tr :class="value.visible + ' project-row'" 
+                                    :style="getRowStyle(value)"
+                                    :data-project-path="value.dir"
+                                    @click="toggleRow(value.dir, $event)">
+                                    <td class="text-start p-3">
+                                        <div class="project-title">
+                                            <span class="text-muted me-2">[{{ value.dir }}]</span>
+                                            <a :href="value.dir" class="text-decoration-none" v-html="highlightText(value.title)" :style="getTitleStyle(value)" @click.stop></a>
+                                        </div>
+                                        <div v-if="value.description" class="project-description" v-html="formatDescription(value.description)"></div>
+                                        <div v-if="value.tags && value.tags.length > 0" class="mt-2">
+                                            <span v-for="tag in value.tags" :key="tag" 
+                                                  class="project-tag" 
+                                                  :style="getTagStyle(value, tag)"
+                                                  :title="getTagTooltip(tag)"
+                                                  @click.stop="searchTag(tag)"
+                                                  v-html="highlightText(tag)">
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Expanded content row for each project -->
+                                <tr v-if="expandedRows[value.dir]" :key="'expanded-' + index" class="expanded-content">
+                                    <td class="p-0" style="border: none;">
+                                        <div class="tabs-container">
+                                            <div class="tabs-nav" v-if="expandedRows[value.dir].files && expandedRows[value.dir].files.length > 0">
+                                                <button v-for="(file, fileIndex) in expandedRows[value.dir].files" 
+                                                        :key="file.name"
+                                                        class="tab-button"
+                                                        :class="{ active: expandedRows[value.dir].activeTab === file.name }"
+                                                        @click="switchTab(value.dir, file.name)">
+                                                    {{ file.name }}
+                                                </button>
+                                            </div>
+                                            <div class="tabs-content">
+                                                <div v-if="!expandedRows[value.dir].files || expandedRows[value.dir].files.length === 0"
+                                                     class="no-files">
+                                                    <p>No viewable files found in this project.</p>
+                                                </div>
+                                                <div v-else-if="expandedRows[value.dir].loading" class="loading">
+                                                    Loading file content...
+                                                </div>
+                                                <div v-else-if="expandedRows[value.dir].error" class="error">
+                                                    {{ expandedRows[value.dir].error }}
+                                                </div>
+                                                <div v-else class="tab-pane active">
+                                                    <pre class="file-content">{{ expandedRows[value.dir].content }}</pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
                         </tbody>
                     </table>
                 </div>
@@ -275,9 +423,13 @@ function parseMenuFromMarkdown($filePath) {
             data() {
                 return {
                     searchstr: "",
-                    dirs: <?php
+                    expandedRows: {}, // Track expanded rows and their content
+                    viewedFiles: <?php 
                             // Include color configuration
                             require_once 'config.php';
+                            echo json_encode($viewed_files); 
+                    ?>,
+                    dirs: <?php
                             
                             // GET DIRECTORY TO VUE 3 DATA ARRAY
                             $ignoredFolders = array('.', '..', '.git', '.idea', '.svn', 'css', 'images', 'js', 'vendor', 'node_modules');
@@ -483,6 +635,83 @@ function parseMenuFromMarkdown($filePath) {
                             element.visible = "d-none";
                         }
                     });
+                },
+                async toggleRow(projectPath, event) {
+                    // Prevent toggle if clicking on links or buttons
+                    if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON' || event.target.closest('.project-tag')) {
+                        return;
+                    }
+
+                    if (this.expandedRows[projectPath]) {
+                        // Collapse the row
+                        delete this.expandedRows[projectPath];
+                    } else {
+                        // Expand the row and load files
+                        this.expandedRows[projectPath] = {
+                            files: [],
+                            activeTab: null,
+                            content: '',
+                            loading: true,
+                            error: null
+                        };
+
+                        try {
+                            const availableFiles = await this.loadProjectFiles(projectPath);
+                            this.expandedRows[projectPath].files = availableFiles;
+                            
+                            if (availableFiles.length > 0) {
+                                // Load the first file by default
+                                const firstFile = availableFiles[0].name;
+                                this.expandedRows[projectPath].activeTab = firstFile;
+                                await this.loadFileContent(projectPath, firstFile);
+                            } else {
+                                this.expandedRows[projectPath].loading = false;
+                            }
+                        } catch (error) {
+                            this.expandedRows[projectPath].error = 'Error loading project files: ' + error.message;
+                            this.expandedRows[projectPath].loading = false;
+                        }
+                    }
+                },
+                async loadProjectFiles(projectPath) {
+                    try {
+                        // Get all available files for this project in one request
+                        const response = await fetch(`check_file.php?project=${encodeURIComponent(projectPath)}`);
+                        const result = await response.json();
+                        
+                        if (result.files && Array.isArray(result.files)) {
+                            return result.files.map(fileName => ({ name: fileName }));
+                        } else {
+                            console.error('Unexpected response from check_file.php:', result);
+                            return [];
+                        }
+                    } catch (error) {
+                        console.error(`Error loading files for project ${projectPath}:`, error);
+                        return [];
+                    }
+                },
+                async switchTab(projectPath, fileName) {
+                    this.expandedRows[projectPath].activeTab = fileName;
+                    await this.loadFileContent(projectPath, fileName);
+                },
+                async loadFileContent(projectPath, fileName) {
+                    this.expandedRows[projectPath].loading = true;
+                    this.expandedRows[projectPath].error = null;
+
+                    try {
+                        const response = await fetch(`get_file.php?project=${encodeURIComponent(projectPath)}&file=${encodeURIComponent(fileName)}`);
+                        const result = await response.json();
+
+                        if (result.content !== undefined) {
+                            this.expandedRows[projectPath].content = result.content;
+                        } else {
+                            this.expandedRows[projectPath].error = 'Error loading file: ' + (result.error || 'Unknown error');
+                        }
+                    } catch (error) {
+                        this.expandedRows[projectPath].error = 'Error loading file: ' + error.message;
+                    } finally {
+                        this.expandedRows[projectPath].loading = false;
+                    }
                 }
             }
         }).mount('#app');
