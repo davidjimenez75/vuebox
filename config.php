@@ -41,51 +41,83 @@ $tags_colors = [
         'name' => 'Template - A template engine for JavaScript',
         'color' => 'gray'
     ],
-    'HIGH' => [
+    'high' => [
         'name' => 'High Priority',
         'color' => 'red'
     ],
-    'MEDIUM' => [
+    'medium' => [
         'name' => 'Medium Priority',
         'color' => 'yellow'
     ],
-    'MEDIUM-HIGH' => [
+    'med' => [
+        'name' => 'Medium Priority',
+        'color' => 'yellow'
+    ],
+    'medium-high' => [
         'name' => 'Medium-High Priority',
         'color' => 'orange'
     ],
-    'LOW' => [
+    'low' => [
         'name' => 'Low Priority',
         'color' => 'green'
     ],
-    'EASY' => [
+    'easy' => [
         'name' => 'Easy Task',
         'color' => 'green'
     ],
-    'ERRORS' => [
-        'name' => 'Errors - Bug tracking and fixing',
+    'error' => [
+        'name' => 'Error - Issue tracking and fixing',
         'color' => 'red'
     ],
-    'BUGS' => [
+    'errors' => [
+        'name' => 'Errors - Issues tracking and fixing',
+        'color' => 'red'
+    ],
+    'bug' => [
+        'name' => 'Bug - Issue and bug tracking',
+        'color' => 'red'
+    ],
+    'bugs' => [
         'name' => 'Bugs - Issues and bug tracking',
         'color' => 'red'
     ],
-    'TESTING' => [
+    'testing' => [
         'name' => 'Testing - Quality assurance and testing',
         'color' => 'yellow'
     ],
-    'TODO' => [
-        'name' => 'To-Do - Tasks to be completed',
-        'color' => 'blue'
+    'todo' => [
+        'name' => 'To-Do - Task to be completed',
+        'color' => 'red'
     ],
-    'DEBUG' => [
+    'todos' => [
+        'name' => 'To-Dos - Tasks to be completed',
+        'color' => 'red'
+    ],
+    'to-do' => [
+        'name' => 'To-Do - Task to be completed',
+        'color' => 'red'
+    ],
+    'to-dos' => [
+        'name' => 'To-Do - Tasks to be completed',
+        'color' => 'red'
+    ],
+    'wip' => [
+        'name' => 'Work in Progress - Tasks to be completed',
+        'color' => 'orange'
+    ],
+    'done' => [
+        'name' => 'Done - Completed task ',
+        'color' => 'green'
+    ],
+    'debug' => [
         'name' => 'Debug - Debugging tasks',
         'color' => 'purple'
     ],
-    'TYPOS' => [
+    'typos' => [
         'name' => 'Typos - Spelling and grammar corrections',
         'color' => 'gray'
     ],
-    'TYPO' => [
+    'typo' => [
         'name' => 'Typo - Minor spelling errors',
         'color' => 'gray'
     ],
