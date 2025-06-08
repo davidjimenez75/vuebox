@@ -25,3 +25,8 @@ table.mytable tr:hover {
 .text-description {
   text-align: left;
 }
+
+
+.container {
+  width: 100%;
+}
