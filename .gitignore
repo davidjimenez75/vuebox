@@ -1,5 +1,24 @@
+## IGNORE ALL FOLDERS
+/*/
+
+## DONT IGNORE SUBPROJECTS
+!/1/
+!/2/
+!/3/
+
+
+## IGNORED FOLDERS
 /.idea
 /vendor
 /node_modules
-yarn.lock
 /package-lock.json
+
+
+## IGNORED FILES
+yarn.lock
+.DS_Store
+/.env
+/.env.local
+/.env.development
+/.env.production
+/.env.test
