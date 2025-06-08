@@ -139,6 +139,8 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                    
+                <!-- BEGIN - Navigation links and dropdowns imported from index-menu.md -->
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Vue 3</a>
@@ -169,6 +171,9 @@
                             </ul>
                         </li>
                     </ul>
+                    <!-- END - Navigation links and dropdowns imported from index-menu.md -->
+
+                    
                     <form class="d-flex" role="search" @submit.prevent="search(searchstr)">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="searchstr" @input="search(searchstr)">
                         <button class="btn btn-outline-success" type="submit">Search</button>
