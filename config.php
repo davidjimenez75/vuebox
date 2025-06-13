@@ -41,6 +41,14 @@ $tags_colors = [
         'name' => 'Vue.js - A progressive JavaScript framework',
         'color' => 'blue'
     ],
+    'vue3' => [
+        'name' => 'Vue 3 - The latest version of Vue.js',
+        'color' => 'blue'
+    ],
+    'vuex' => [
+        'name' => 'Vuex - State management pattern + library for Vue.js applications',
+        'color' => 'blue'
+    ],
     'marked' => [
         'name' => 'Marked - A markdown parser and compiler',
         'color' => 'purple'
@@ -52,6 +60,10 @@ $tags_colors = [
     'random' => [
         'name' => 'Random - Random number generation',
         'color' => 'pink'
+    ],
+    'sandbox' => [
+        'name' => 'A Sandbox - A safe environment for testing and learning',
+        'color' => 'blue'
     ],
     'template' => [
         'name' => 'Template - A template engine for JavaScript',
@@ -210,7 +222,8 @@ $background_colors = array(
     'purple' => '#e2d9f3',     // Light purple background
     'orange' => '#ffe8d1',     // Light orange background
     'pink' => '#f8d7e9',       // Light pink background
-    'gray' => '#c0c2c4'        // More visible and darker light gray background   
+    'gray' => '#c0c2c4',       // More visible and darker light gray background   
+    'black' => '#5a6268'       // Slightly lighter dark background for black tag
 );
 
 
@@ -264,6 +277,18 @@ $colors = [
         'text_color' => '#495057',    // Dark gray text
         'tag_bg' => '#6c757d',        // Tag background
         'tag_text' => '#ffffff'       // Tag text color
+    ],
+    'grey' => [
+        'bg_color' => '#f8f9fa',      // Light gray background
+        'text_color' => '#495057',    // Dark gray text
+        'tag_bg' => '#6c757d',        // Tag background
+        'tag_text' => '#ffffff'       // Tag text color
+    ],
+    'black' => [
+        'bg_color' => '#343a40',      // Dark background
+        'text_color' => '#ffffff',    // White text
+        'tag_bg' => '#000000',        // Black tag background
+        'tag_text' => '#ffffff'       // White tag text
     ]
 ];
 
