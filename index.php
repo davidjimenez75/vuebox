@@ -248,10 +248,10 @@ function parseMenuFromMarkdown($filePath) {
         .custom-table {
             --bs-table-bg: transparent;
         }
-        
-        /* Custom table styling - ensure background colors are applied */
+          /* Custom table styling - ensure background colors are applied */
         .custom-table tbody tr.project-row {
             /* Let inline styles take precedence */
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
         
         .custom-table tbody tr.project-row:hover {
