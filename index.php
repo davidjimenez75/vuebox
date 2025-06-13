@@ -288,11 +288,19 @@ function parseMenuFromMarkdown($filePath) {
             transition: all 0.2s ease;
             text-decoration: none;
         }
-        
-        .project-tag:hover {
+          .project-tag:hover {
             transform: translateY(-1px);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             text-decoration: none;
+        }
+          /* Project image styling */
+        .project-image {
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .project-image:hover {
+            transform: scale(1.05);
         }
     </style>
 
@@ -349,10 +357,9 @@ function parseMenuFromMarkdown($filePath) {
                                     :style="getRowStyle(value)"
                                     :data-project-path="value.dir"
                                     @click="toggleRow(value.dir, $event)">
-                                    <td class="text-start p-3">
-                                        <div class="project-title">
+                                    <td class="text-start p-3">                                        <div class="project-title">
                                             <span class="text-muted me-2">[{{ value.dir }}]</span>
-                                            <a :href="value.dir" class="text-decoration-none" v-html="highlightText(value.title)" :style="getTitleStyle(value)" @click.stop></a>
+                                            <a :href="value.dir" target="_blank" class="text-decoration-none" v-html="highlightText(value.title)" :style="getTitleStyle(value)" @click.stop></a>
                                         </div>
                                         <div v-if="value.description" class="project-description" v-html="formatDescription(value.description)"></div>
                                         <div v-if="value.tags && value.tags.length > 0" class="mt-2">
@@ -364,11 +371,20 @@ function parseMenuFromMarkdown($filePath) {
                                                   v-html="highlightText(tag)">
                                             </span>
                                         </div>
+                                    </td>                                    <td class="text-end p-3" style="width: 150px;" v-if="value.has_image">
+                                        <a :href="value.dir" target="_blank" @click.stop>
+                                            <img :src="value.dir + '/index.png'" 
+                                                 :alt="'Screenshot of ' + value.title"
+                                                 class="img-fluid rounded project-image"
+                                                 style="max-width: 120px; max-height: 80px; object-fit: cover;">
+                                        </a>
                                     </td>
-                                </tr>
-                                <!-- Expanded content row for each project -->
+                                    <td class="text-end p-3" style="width: 150px;" v-else>
+                                        <!-- Empty cell for alignment when no image -->
+                                    </td>
+                                </tr>                                <!-- Expanded content row for each project -->
                                 <tr v-if="expandedRows[value.dir]" :key="'expanded-' + index" class="expanded-content">
-                                    <td class="p-0" style="border: none;">
+                                    <td class="p-0" colspan="2" style="border: none;">
                                         <div class="tabs-container">
                                             <div class="tabs-nav" v-if="expandedRows[value.dir].files && expandedRows[value.dir].files.length > 0">
                                                 <button v-for="(file, fileIndex) in expandedRows[value.dir].files" 
@@ -442,10 +458,10 @@ function parseMenuFromMarkdown($filePath) {
                                     $project = array();
                                     $project["dir"] = (string) basename($dir);
                                     $project["visible"] = "visible";
-                                    $project["title"] = $project["dir"]; // Default title
-                                    $project["description"] = "";
+                                    $project["title"] = $project["dir"]; // Default title                                    $project["description"] = "";
                                     $project["tags"] = array();
                                     $project["background_color"] = "#ffffff"; // Default white background
+                                    $project["has_image"] = file_exists("./" . $dir . "/index.png"); // Check if index.png exists
                                     
                                     // Read index.txt file
                                     $index_file = "./" . $dir . "/index.txt";
