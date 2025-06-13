@@ -7,6 +7,9 @@
  * directories with their titles, descriptions, and tags.
  */
 
+ require_once 'config.php'; // Include configuration file
+
+
 // Create the main menu from the index-menu.md file
 function parseMenuFromMarkdown($filePath) {
     if (!file_exists($filePath)) {
@@ -66,14 +69,15 @@ function parseMenuFromMarkdown($filePath) {
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <title><?php echo $title; ?></title>
+    <description><?php echo $description; ?></description>
+    <meta name="author" content="<?php echo $author; ?>">   
 
     <link rel="icon" href="./favicon.ico">
     <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
 
-    <title>VueBox</title>
+ 
 
     <!--BOOTSTRAP 5-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -300,13 +304,13 @@ function parseMenuFromMarkdown($filePath) {
         <div class="spinner-border spinner-border-custom text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-        <p class="mt-3 text-muted">Loading VueBox...</p>
+        <p class="mt-3 text-muted">Loading <?php echo $title; ?>...</p>
     </div>
     <div id="app" v-cloak><!--#app-->
 
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">VueBox</a>
+                <a class="navbar-brand" href="<?php echo $menu_first_item_url; ?>"><?php echo $menu_first_item; ?></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>

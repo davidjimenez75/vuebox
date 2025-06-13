@@ -6,6 +6,22 @@
  * You can customize the colors and styling by editing the values below.
  */
 
+// Define he title of the page
+$title = 'VueBox';
+// Define the main menu first item
+$menu_first_item = 'Vuebox';
+// Define the main menu first item url
+$menu_first_item_url = '#';
+// Define the description of the page
+$description = 'VueBox is a sandbox for learning Vue.js';
+// Define the author of the page
+$author = 'VueBox Team';
+// Define the base URL for the project
+$base_url = '#';
+// Define the path to the logo image
+$logo_path = './favicon.png';
+
+
 // Tags configuration
 // Each tag corresponds to a project category and is associated with a color scheme
 $tags_colors = [
