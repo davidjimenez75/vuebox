@@ -2,10 +2,17 @@
 /*/
 
 ## DONT IGNORE SUBPROJECTS
-!/1/
-!/2/
-!/3/
-
+!/black/
+!/blue/
+!/gray/
+!/grey/
+!/green/
+!/orange/
+!/pink/
+!/purple/
+!/red/
+!/yellow/
+!/white/
 
 ## IGNORED FOLDERS
 /.idea
